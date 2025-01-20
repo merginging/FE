@@ -14,7 +14,7 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v4
         with: 
-          repository: merging/FE #팀 메인 레포 이름 
+          repository: merginging/FE #팀 메인 레포 이름 
           token: ${{ secrets.MERGING_TOKEN }} #팀 레포 접근 토큰
           fetch-depth: 0
           ref: main
