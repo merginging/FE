@@ -14,15 +14,15 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v4
         with: 
-          repository: merging-Branchify/Branchify_FE #팀 메인 레포 이름 
-          token: ${{ secrets.BRANCHIFY_TOKEN }} #팀 레포 접근 토큰
+          repository: merging/FE #팀 메인 레포 이름 
+          token: ${{ secrets.MERGING_TOKEN }} #팀 레포 접근 토큰
           fetch-depth: 0
           ref: main
 
       #포크 개인 레포 remote 추가 
       - name: Add remote-url
         run: |
-          git remote add forked-repo https://hyuke81:${{ secrets.BRANCHIFY_TOKEN }}@github.com/hyuke81/Branchify_FE
+          git remote add forked-repo https://hyuke81:${{ secrets.MERGING_TOKEN }}@github.com/hyuke81/merging_FE
           git config user.name "hyuke81"
           git config user.email "${{ secrets.EMAIL }}"
       
