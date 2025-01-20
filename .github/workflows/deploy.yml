@@ -1,0 +1,36 @@
+name: Synchronize to forked repo
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    name: Sync forked repo
+    runs-on: ubuntu-latest
+
+    steps:
+      #팀 메인 레포 체크아웃 
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with: 
+          repository: merging-Branchify/Branchify_FE #팀 메인 레포 이름 
+          token: ${{ secrets.BRANCHIFY_TOKEN }} #팀 레포 접근 토큰
+          fetch-depth: 0
+          ref: main
+
+      #포크 개인 레포 remote 추가 
+      - name: Add remote-url
+        run: |
+          git remote add forked-repo https://hyuke81:${{ secrets.BRANCHIFY_TOKEN }}@github.com/hyuke81/Branchify_FE
+          git config user.name "hyuke81"
+          git config user.email "${{ secrets.EMAIL }}"
+      
+      #개인 레포 변경사항 푸시 
+      - name: Push changes to forked-repo 
+        run: |
+          git push -f forked-repo main
+      
+      - name: Clean up
+        run: |
+          git remote remove forked-repo
