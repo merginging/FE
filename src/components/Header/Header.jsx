@@ -6,6 +6,7 @@ import HeaderButton from './HeaderButton';
 import MenuBar from './MenuBar';
 import { useDispatch } from 'react-redux';
 import { setShouldScrollToJoinForm } from '../../stores/store';
+import { useNavigate } from 'react-router-dom';
 
 const headerStyle = css`
   display: flex;
@@ -33,6 +34,24 @@ const logoStyle = css`
   align-items: center;
 `;
 
+const loginStyle = css`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 10px;
+  font-family: 'Pretendard-Bold';
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 22px;
+  color: var(--gray-600, #6a6a6a);
+  cursor: pointer;
+  margin-right: 30px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+`;
+
 const Header = ({ onButtonClick }) => {
   const dispatch = useDispatch();
 
@@ -42,6 +61,11 @@ const Header = ({ onButtonClick }) => {
     if (mainSection) {
       mainSection.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const nav = useNavigate();
+  const handleNavigateToLogin = () => {
+    nav('/login');
   };
 
   return (
@@ -58,6 +82,9 @@ const Header = ({ onButtonClick }) => {
         </div>
         {/* 네비게이션 메뉴바 */}
         <MenuBar />
+        <div css={loginStyle} onClick={handleNavigateToLogin}>
+          로그인
+        </div>
         {/* 버튼 */}
         <HeaderButton text="지금 도입하러 가기 ->" onClick={onButtonClick} />
       </div>
