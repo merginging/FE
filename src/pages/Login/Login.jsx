@@ -12,7 +12,7 @@ import {
   bottomTextStyle,
   signupLinkStyle,
   errorTextStyle,
-} from './Login';
+} from './Login.styles';
 import googleLogo from '../../assets/icons/googleLogo.png';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
