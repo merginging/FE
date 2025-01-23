@@ -11,13 +11,15 @@ import {
     buttonStyle,
     requiredTextStyle,
     errorTextStyle,
-} from './Signup';
-import googleLogo from '../../assets/icons/googleLogo.png'; 
+} from './Signup.styles';
+import googleLogo from '../../assets/icons/googleLogo.png';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Signup = () => {
     const navigate = useNavigate();
+
     const [formValues, setFormValues] = useState({
         name: '',
         organization: '',
@@ -31,6 +33,8 @@ const Signup = () => {
         password: '',
         confirmPassword: '',
     });
+
+    const [apiError, setApiError] = useState(''); // API 호출 실패 시 에러 메시지
 
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -71,7 +75,7 @@ const Signup = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         // 최종 유효성 검사
@@ -92,10 +96,29 @@ const Signup = () => {
             confirmPassword: confirmPasswordError,
         });
 
-        // 유효성 검사가 모두 통과되면 데이터 전송
-        if (!emailError && !passwordError && !confirmPasswordError) {
-            console.log('회원가입 정보:', formValues);
-            navigate('/');
+        if (emailError || passwordError || confirmPasswordError) {
+            return;
+        }
+
+        try {
+            // API 요청
+            const response = await axios.post(
+                'https://www.branchify.site/api/user/join',
+                {
+                    email: formValues.email,
+                    username: formValues.name,
+                    password: formValues.password,
+                    affiliation: formValues.organization,
+                }
+            );
+            console.log('회원가입 성공:', response.data);
+            alert('회원가입이 성공적으로 완료되었습니다.');
+            navigate('/'); // 성공 시 홈으로 이동
+        } catch (error) {
+            console.error('회원가입 실패:', error.response?.data || error.message);
+            setApiError(
+                error.response?.data?.message || '회원가입에 실패했습니다. 다시 시도해주세요.'
+            );
         }
     };
 
@@ -176,6 +199,7 @@ const Signup = () => {
                         <p css={errorTextStyle}>{errors.confirmPassword}</p>
                     )}
                 </label>
+                {apiError && <p css={errorTextStyle}>{apiError}</p>}
                 <button css={buttonStyle} type="submit">
                     확인
                 </button>
