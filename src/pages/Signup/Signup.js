@@ -6,7 +6,8 @@ export const containerStyle = css`
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    margin-top: 100px;
+    margin-top: 130px;
+    margin-bottom: 90px;
 `;
 
 export const titleStyle = css`
@@ -90,7 +91,6 @@ export const buttonStyle = css`
     text-align: center;
     box-sizing: border-box;
     cursor: pointer;
-    margin-bottom: 90px;
     margin-top: 5px;
     border: none;
 `;
