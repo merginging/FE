@@ -113,3 +113,11 @@ export const signupLinkStyle = css`
     margin-left: 5px;
     cursor: pointer;
 `;
+
+export const errorTextStyle = css`
+    color: #f1502f;
+    font-family: 'Pretendard-Regular';
+    font-size: 12px;
+    margin-bottom: 15px;
+    margin-left: 5px;
+`;
