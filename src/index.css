@@ -41,11 +41,8 @@
   font-style: normal;
 }
 
-:root {
-  // 컬러 변수 추가 필요
-
-  body {
-    font-family: 'Pretendard-Regular', 'Pretendard-Semibold',
-      'Pretendard-Medium';
-  }
+body {
+  font-family: 'Pretendard-Regular', 'Pretendard-Light', 'Pretendard-Medium', 'Pretendard-SemiBold', 'Pretendard-Bold';
+  margin: 0;
+  padding: 0;
 }
