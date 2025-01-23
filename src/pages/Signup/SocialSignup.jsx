@@ -7,10 +7,10 @@ import {
     buttonStyle,
     requiredTextStyle,
     errorTextStyle, 
-} from './Signup'; 
+} from './Signup.styles'; 
 import {
     logoutButtonStyle
-} from './SocialSignup'; 
+} from './SocialSignup.styles'; 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
