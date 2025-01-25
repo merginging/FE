@@ -33,10 +33,7 @@ const Login = () => {
 
     const [apiError, setApiError] = useState(''); // API 호출 실패 시 에러 메시지
 
-    const validateEmail = (email) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    };
+    const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -70,31 +67,20 @@ const Login = () => {
             password: passwordError,
         });
     
-        console.log('유효성 검사 결과:', { emailError, passwordError }); // 유효성 검사 결과 확인
-    
         // 모든 유효성 검사 통과 시
         if (!emailError && !passwordError) {
             try {
-                console.log('로그인 요청 데이터:', {
+                const response = await axios.post('https://www.branchify.site/api/user/login', {
                     email: formValues.email,
                     password: formValues.password,
-                }); // API 요청 데이터 확인
-    
-                const response = await axios.post(
-                    'https://www.branchify.site/api/user/login',
-                    {
-                        email: formValues.email,
-                        password: formValues.password,
-                    }
-                );
-    
-                console.log('로그인 성공 응답:', response.data); // 서버 응답 확인
+                });
     
                 // 로그인 성공: JWT 저장
                 const { token } = response.data;
                 localStorage.setItem('token', token);
                 console.log('JWT 저장 완료:', token); // JWT 저장 확인
                 navigate('/'); 
+                window.location.reload();
             } catch (error) {
                 console.error('로그인 실패 에러:', error.response?.data || error.message); // API 오류 로그
                 setApiError(
