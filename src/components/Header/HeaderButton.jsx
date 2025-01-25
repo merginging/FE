@@ -30,15 +30,15 @@ const buttonStyle = css`
   }
 `;
 
-const HeaderButton = ({ text }) => {
-  const dispatch = useDispatch();
-
-  const handleClick = () => {
-    dispatch(setShouldScrollToJoinForm(true));
-  };
-
+const HeaderButton = ({ text, onClick }) => {
   return (
-    <button css={buttonStyle} onClick={handleClick}>
+    <button
+      css={buttonStyle}
+      onClick={() => {
+        console.log(`HeaderButton clicked. text: ${text}`);
+        onClick(); // 부모에서 전달받은 onClick 실행
+      }}
+    >
       {text}
     </button>
   );

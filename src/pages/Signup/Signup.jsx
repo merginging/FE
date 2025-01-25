@@ -113,7 +113,7 @@ const Signup = () => {
             );
             console.log('회원가입 성공:', response.data);
             alert('회원가입이 성공적으로 완료되었습니다.');
-            navigate('/'); // 성공 시 홈으로 이동
+            navigate('/login'); // 성공 시 로그인으로 이동
         } catch (error) {
             console.error('회원가입 실패:', error.response?.data || error.message);
             setApiError(
