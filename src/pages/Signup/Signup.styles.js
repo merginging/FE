@@ -58,7 +58,7 @@ export const dividerStyle = css`
     margin-bottom: 29px;
 `;
 
-export const inputStyle = css`
+export const inputStyle = (isFocused, hasValue) => css`
     width: 371px;
     height: 45px;
     border-radius: 9px;
@@ -67,14 +67,15 @@ export const inputStyle = css`
     font-family: "Pretendard Variable";
     font-size: 14px;
     font-weight: 500;
-    color: #b0b6bd;
-    margin-bottom: 15px;
+    color: ${isFocused || hasValue ? '#000' : '#b0b6bd'};
+    margin-bottom: 19px;
     box-sizing: border-box;
 
-::placeholder {
-    color: #b0b6bd;
-}
+    ::placeholder {
+        color: #b0b6bd;
+    }
 `;
+
 
 export const buttonStyle = css`
     width: 371px;

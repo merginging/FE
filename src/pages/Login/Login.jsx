@@ -109,7 +109,7 @@ const Login = () => {
                     css={inputStyle}
                     type="text"
                     name="email"
-                    placeholder="아이디를 입력해주세요"
+                    placeholder="가입하신 이메일을 입력해주세요"
                     value={formValues.email}
                     onChange={handleChange}
                 />
