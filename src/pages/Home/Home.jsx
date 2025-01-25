@@ -10,6 +10,7 @@ import Feature from './Feature';
 import Feature2 from './Feature2';
 import BetaTestButton from './BetatestBanner/BetatestBanner';
 import JoinForm from './JoinForm/JoinForm';
+import Header from '../../components/Header/Header';
 import { setShouldScrollToJoinForm } from '../../stores/store';
 
 const homeStyle = css``;
@@ -29,6 +30,12 @@ const Home = () => {
     }
   }, [shouldScrollToJoinForm, dispatch]);
 
+  const scrollToJoinForm = () => {
+    if (joinFormSectionRef.current) {
+      joinFormSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const scrollToMainSection = () => {
     if (mainSectionRef.current) {
       mainSectionRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -37,6 +44,7 @@ const Home = () => {
 
   return (
     <div css={homeStyle}>
+      <Header onButtonClick={scrollToJoinForm} />
       <div ref={mainSectionRef} id="main-section">
         <Main />
       </div>
