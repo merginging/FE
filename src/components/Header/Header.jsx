@@ -1,12 +1,13 @@
-// src/components/Header/Header.jsx
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import logoImage from '../../assets/images/logo-small.png';
 import HeaderButton from './HeaderButton';
 import MenuBar from './MenuBar';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setShouldScrollToJoinForm } from '../../stores/store';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { setIsLoggedIn } from '../../stores/authSlice'; // 로그인 상태 관리 액션 가져오기
 
 const headerStyle = css`
   display: flex;
@@ -29,66 +30,61 @@ const headerStyle = css`
   }
 `;
 
-const logoStyle = css`
-  display: flex;
-  align-items: center;
-`;
-
-const loginStyle = css`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-right: 10px;
-  font-family: 'Pretendard-Bold';
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 22px;
-  color: var(--gray-600, #6a6a6a);
-  cursor: pointer;
-  margin-right: 30px;
-
-  @media (max-width: 768px) {
-    font-size: 14px;
-  }
-`;
-
-const Header = ({ onButtonClick }) => {
+const Header = ({ onButtonClick = () => {} }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleLogoClick = () => {
-    dispatch(setShouldScrollToJoinForm(false)); // JoinForm으로 스크롤하지 않도록 설정
-    const mainSection = document.querySelector('#main-section');
-    if (mainSection) {
-      mainSection.scrollIntoView({ behavior: 'smooth' });
-    }
+  // Redux를 통해 로그인 상태를 가져옴
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token'); // localStorage에서 토큰 확인
+    dispatch(setIsLoggedIn(!!token)); // 토큰 유무에 따라 Redux 상태 업데이트
+  }, [dispatch]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // 토큰 삭제
+    dispatch(setIsLoggedIn(false)); // Redux 상태 업데이트
+    navigate('/'); // 메인 페이지로 이동
   };
 
-  const nav = useNavigate();
-  const handleNavigateToLogin = () => {
-    nav('/login');
+  const handleBotManagement = () => {
+    navigate('/price'); // 봇 관리 페이지로 이동 (임시)
   };
 
   return (
-    <>
-      <div css={headerStyle}>
-        {/* 로고 이미지 */}
-        <div css={logoStyle} onClick={handleLogoClick}>
-          <img
-            src={logoImage}
-            alt="Logo"
-            width='180px'
-            style={{ maxWidth: '100%', height: 'auto' }}
-          />
+    <div css={headerStyle}>
+      {/* 로고 */}
+      <div
+        css={css`cursor: pointer;`}
+        onClick={() => navigate('/')}
+      >
+        <img src={logoImage} alt="Logo" width="180px" />
+      </div>
+      {/* 메뉴바 */}
+      <MenuBar />
+      {/* 로그인/로그아웃 버튼 */}
+      {isLoggedIn ? (
+        <div
+          css={css`cursor: pointer; font-weight: bold; margin-right: 30px; color: #6A6A6A;`}
+          onClick={handleLogout}
+        >
+          로그아웃
         </div>
-        {/* 네비게이션 메뉴바 */}
-        <MenuBar />
-        <div css={loginStyle} onClick={handleNavigateToLogin}>
+      ) : (
+        <div
+          css={css`cursor: pointer; font-weight: bold; margin-right: 30px; color: #6A6A6A;`}
+          onClick={() => navigate('/login')}
+        >
           로그인
         </div>
-        {/* 버튼 */}
-        <HeaderButton text="지금 도입하러 가기 ->" onClick={onButtonClick} />
-      </div>
-    </>
+      )}
+      {/* 도입/봇 관리 버튼 */}
+      <HeaderButton
+        text={isLoggedIn ? '봇 관리 하기 ->' : '지금 도입하러 가기 ->'}
+        onClick={isLoggedIn ? handleBotManagement : onButtonClick}
+      />
+    </div>
   );
 };
 
