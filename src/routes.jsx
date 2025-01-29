@@ -7,6 +7,7 @@ import Login from './pages/Login/Login.jsx';
 import Signup from './pages/Signup/Signup.jsx';
 import Social from './pages/Signup/SocialSignup.jsx';
 import BotAdd from './pages/Bot/BotAdd.jsx';
+import BotAi from './pages/Bot/BotAi.jsx';
 
 const router = createBrowserRouter([
   {
@@ -41,11 +42,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: 'bot/add',
-        element: < BotAdd />,
+        element: <BotAdd />,
       },
       {
         path: 'bot/ai',
-        element: <Social />,
+        element: <BotAi />,
       },
       {
         path: 'bot/assistant',
