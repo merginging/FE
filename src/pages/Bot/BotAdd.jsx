@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useNavigate } from 'react-router-dom';
-import * as S from './BotAdd.style';
+import * as S from './BotAdd.styles';
 
 const BotAdd = () => {
     const navigate = useNavigate();
