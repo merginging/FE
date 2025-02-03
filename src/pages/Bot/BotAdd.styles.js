@@ -41,7 +41,7 @@ export const descriptionStyle = css`
 
 export const containerStyle = css`
     width: 86%;
-    height: 60%;
+    height: 350px;
     flex-shrink: 0;
     border-radius: 10px;
     border: 1px solid #D6D6D6;
@@ -98,7 +98,7 @@ export const addButtonTextStyle = css`
 
 export const dottedBoxStyle = css`
     width: 100%;
-    height: 400px;
+    height: 280px;
     flex-shrink: 0;
     border-radius: 10px;
     border: 1px dashed #5F6368;

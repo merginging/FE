@@ -31,8 +31,9 @@ export const subDescription = css`
     font-family: 'Pretendard Variable';
     font-size: 16px;
     font-weight: 600;
-    letter-spacing: -0.8px;
+    letter-spacing: -0.2px;
     margin-bottom: 20px;
+    line-height: 1.3;
 `;
 
 export const mainContentBox = css`
