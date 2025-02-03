@@ -46,8 +46,8 @@ const BotAssistant = () => {
             <div css={textContainer}>
                 <h1 css={mainTitle}>봇 추가하기</h1>
                 <p css={subDescription}>
-                    클릭 몇 번이면 봇이 뚝딱뚝딱<br />
-                    와~ 엄청 멋지다!!!! gpt 연결하기 → 프롬포트 입력하기 → 지식 추가 → 액션 추가 → 봇 만들기
+                    클릭 몇 번이면 당신에게 필요한 봇이 완성돼요<br />
+                    아래의 단계에 따라 당신만의 봇을 만들어보세요!
                 </p>
             </div>
 
@@ -115,7 +115,7 @@ const BotAssistant = () => {
 
                 {/* 다음 단계 버튼 */}
                 <div css={submitButtonContainer}>
-                    <div css={submitButton} onClick={() => navigate('/bot/assistant')}>
+                    <div css={submitButton} onClick={() => navigate('/bot/list')}>
                         <img src={arrowIcon} alt="Next" css={submitButtonIcon} />
                         <span css={submitButtonText}>생성하기</span>
                     </div>

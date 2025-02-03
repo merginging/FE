@@ -11,7 +11,7 @@ const BotAdd = () => {
             <h1 css={S.titleStyle}>봇 관리하기</h1>
             <p css={S.descriptionStyle}>
                 나만의 봇을 만들어서 관리해보세요 <br />
-                블라블라 당신의 워크플로우를 부스트 업 해줄거에요
+                당신의 워크플로우를 부스트 업 해줄 봇을 만나보세요!
             </p>
         </div>
 

@@ -37,8 +37,8 @@ const BotAdd = () => {
             <div css={textContainerStyle}>
                 <h1 css={titleStyle}>봇 추가하기</h1>
                 <p css={descriptionStyle}>
-                    클릭 몇 번이면 봇이 뚝딱뚝딲뚞딱<br />
-                    와~ 엄청 멋지다!!!! gpt 연결하기 → 프롬포트 입력하기 → 지식 추가 → 액션 추가 → 봇 만들기
+                    클릭 몇 번이면 당신에게 필요한 봇이 완성돼요<br />
+                    아래의 단계에 따라 당신만의 봇을 만들어보세요!
                 </p>
             </div>
 
