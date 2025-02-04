@@ -26,7 +26,7 @@ export const topContainer = css`
 
 export const titleStyle = css`
     color: #000;
-    font-family: 'Pretendard Variable';
+    font-family: 'Pretendard-Bold';
     font-size: 36px;
     font-weight: 600;
     line-height: 22px;
