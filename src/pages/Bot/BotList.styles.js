@@ -19,7 +19,7 @@ export const statusContainer = css`
 export const titleStyle = css`
     color: #000;
     text-align: center;
-    font-family: "Pretendard Variable";
+    font-family: 'Pretendard-SemiBold';
     font-size: 36px;
     font-weight: 600;
     line-height: 22px;
@@ -55,7 +55,7 @@ export const searchInput = css`
     border: none;
     outline: none;
     background: none;
-    font-family: "Pretendard Variable";
+    font-family: 'Pretendard-Light';
     font-size: 16px;
     font-weight: 200;
     color: #8e8e8e;
@@ -93,12 +93,11 @@ export const botColumn = (widthPercent) => css`
 
 export const botNameStyle = css`
   color: #000;
-  font-family: "Pretendard Variable";
+  font-family: 'Pretendard-Medium';
   font-size: 14px;
   font-weight: 600;
 `;
 
-// 태그 스타일
 export const tagStyle = (textColor, bgColor) => css`
   font-size: 12px;
   font-weight: 600;
@@ -108,7 +107,6 @@ export const tagStyle = (textColor, bgColor) => css`
   padding: 3px 10px;
 `;
 
-// 상태 원형 아이콘
 export const statusCircle = (color) => css`
   width: 9px;
   height: 9px;
@@ -116,14 +114,12 @@ export const statusCircle = (color) => css`
   background: ${color};
 `;
 
-// 상태 텍스트
 export const statusText = css`
   font-size: 12px;
   font-weight: 600;
   color: #000;
 `;
 
-// 설정 버튼
 export const settingButton = css`
   width: 56px;
   height: 38px;
