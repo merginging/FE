@@ -56,12 +56,12 @@ const BotAssistant = () => {
                 <h2 css={sectionTitle}>2. 비서 만들기</h2>
 
                 <label css={sectionTitle}>
-                    ✳️ 챗봇 이름 만들기<span css={asterisk}>*</span>
+                    챗봇 이름 만들기<span css={asterisk}>*</span>
                 </label>
                 <input css={inputBox} placeholder="봇 이름을 작성해주세요." />
 
                 <label css={sectionTitle}>
-                    ✳️ 챗봇 프롬프트 작성하기<span css={asterisk}>*</span>
+                    챗봇 프롬프트 작성하기<span css={asterisk}>*</span>
                     <button css={templateButton}>템플릿 사용하기</button>
                 </label>
                 <textarea
@@ -76,7 +76,7 @@ const BotAssistant = () => {
                 <div css={knowledgeActionContainer}>
                     {/* 지식 추가하기 */}
                     <div css={knowledgeBox}>
-                        <h3 css={sectionText}>✳️ 지식 추가하기</h3>
+                        <h3 css={sectionText}>지식 추가하기</h3>
                         <div css={boxSectionStyle}>
                             <div css={boxStyle}>
                                 <span css={knowledgeText}>PDF</span>
@@ -95,7 +95,7 @@ const BotAssistant = () => {
 
                     {/* 액션 선택하기 */}
                     <div css={actionBox}>
-                        <h3 css={sectionText}>✳️ 액션 선택하기</h3>
+                        <h3 css={sectionText}>액션 선택하기</h3>
                         <div css={boxSectionStyle}>
                             <div css={boxStyle}>
                             <span css={actionText}>🏞️</span>
