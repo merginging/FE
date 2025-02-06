@@ -7,6 +7,10 @@ export const pageStyle = css`
     flex-direction: column;
     align-items: center;
     margin-top: 50px;
+
+    @media (max-width: 768px) {
+        margin-top: 30px;
+    }
 `;
 
 export const textContainerStyle = css`
@@ -14,6 +18,10 @@ export const textContainerStyle = css`
     flex-direction: column;
     align-items: flex-start;
     width: 86%;
+
+    @media (max-width: 768px) {
+        width: 90%;
+    }
 `;
 
 export const titleStyle = css`
@@ -21,6 +29,11 @@ export const titleStyle = css`
     font-size: 36px;
     font-weight: 700;
     margin-bottom: 19px;
+
+    @media (max-width: 768px) {
+        font-size: 28px;
+        text-align: center;
+    }
 `;
 
 export const descriptionStyle = css`
@@ -29,6 +42,11 @@ export const descriptionStyle = css`
     font-weight: 600;
     margin-bottom: 20px;
     line-height: 1.3;
+
+    @media (max-width: 768px) {
+        font-size: 14px;
+        text-align: center;
+    }
 `;
 
 export const containerStyle = css`
@@ -41,6 +59,11 @@ export const containerStyle = css`
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
+
+    @media (max-width: 768px) {
+        width: 95%;
+        padding: 15px;
+    }
 `;
 
 export const gptContainerStyle = css`
@@ -52,6 +75,11 @@ export const gptContainerStyle = css`
     gap: 20px;
     padding: 10px;
     margin-top: 10px;
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+        gap: 10px;
+    }
 `;
 
 export const gptButtonStyle = (isSelected) => css`
@@ -66,11 +94,21 @@ export const gptButtonStyle = (isSelected) => css`
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     padding: 10px;
+
+    @media (max-width: 768px) {
+        width: ${isSelected ? '110px' : '90px'};
+        height: ${isSelected ? '130px' : '90px'};
+    }
 `;
 
 export const gptIconStyle = css`
     width: 100px;
     height: 100px;
+
+    @media (max-width: 768px) {
+        width: 80px;
+        height: 80px;
+    }
 `;
 
 export const gptTextStyle = css`
@@ -78,6 +116,10 @@ export const gptTextStyle = css`
     font-size: 14px;
     font-weight: 600;
     color: #000;
+
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
 `;
 
 export const inputContainerStyle = css`
@@ -85,7 +127,12 @@ export const inputContainerStyle = css`
     margin-top: 40px;
     display: flex;
     flex-direction: column;
-    align-items: left;
+    align-items: flex-start;
+
+    @media (max-width: 768px) {
+        width: 80%;
+        margin-top: 20px;
+    }
 `;
 
 export const inputLabelStyle = css`
@@ -93,6 +140,10 @@ export const inputLabelStyle = css`
     font-weight: 600;
     color: #333;
     margin-bottom: 5px;
+
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
 `;
 
 export const inputStyle = css`
@@ -102,6 +153,11 @@ export const inputStyle = css`
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
+
+    @media (max-width: 768px) {
+        height: 35px;
+        font-size: 12px;
+    }
 `;
 
 export const buttonContainerStyle = css`
@@ -111,6 +167,11 @@ export const buttonContainerStyle = css`
     gap: 15px;
     width: 100%;
     margin-top: 20px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 10px;
+    }
 `;
 
 export const prevTextStyle = css`
@@ -118,6 +179,10 @@ export const prevTextStyle = css`
     font-weight: 600;
     color: #666;
     cursor: pointer;
+
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
 `;
 
 export const nextButtonStyle = css`
@@ -137,16 +202,30 @@ export const nextButtonStyle = css`
     &:hover {
         background: #d9442a;
     }
+
+    @media (max-width: 768px) {
+        width: 100px;
+        height: 32px;
+    }
 `;
 
 export const buttonTextStyle = css`
     color: #FFF;
     font-size: 14px;
     font-weight: 600;
+
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
 `;
 
 export const arrowIconStyle = css`
     width: 14px;
     height: 14px;
     margin-left: 5px;
+
+    @media (max-width: 768px) {
+        width: 12px;
+        height: 12px;
+    }
 `;
