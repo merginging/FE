@@ -8,7 +8,6 @@ import Signup from './pages/Signup/Signup.jsx';
 import Social from './pages/Signup/SocialSignup.jsx';
 import BotAdd from './pages/Bot/BotAdd.jsx';
 import BotAi from './pages/Bot/BotAi.jsx';
-import BotAssistant from './pages/Bot/BotAssistant.jsx';
 import BotList from './pages/Bot/BotList.jsx';
 
 const router = createBrowserRouter([
@@ -49,10 +48,6 @@ const router = createBrowserRouter([
       {
         path: 'bot/ai',
         element: <BotAi />,
-      },
-      {
-        path: 'bot/assistant',
-        element: <BotAssistant />,
       },
       {
         path: 'bot/list',
