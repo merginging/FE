@@ -76,16 +76,15 @@ const Header = ({ onButtonClick = () => {} }) => {
 
   const handleLogout = async () => {
     try {
-      const cookies = document.cookie.split('; ').find(row => row.startsWith('refreshToken='));
       await axios.post(
         'https://www.branchify.site/api/user/logout',
-        {},
+        {}, 
         { withCredentials: true }
       );
-
+  
       localStorage.removeItem('access_token');
       dispatch(setIsLoggedIn(false));
-
+  
       navigate('/');
       window.location.reload();
     } catch (error) {
