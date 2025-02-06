@@ -28,7 +28,7 @@ export const titleStyle = css`
 
 export const descriptionStyle = css`
     color: #252525;
-    font-family: 'Pretendard Variable';
+    font-family: 'Pretendard-Medium';
     font-size: 16px;
     font-weight: 600;
     letter-spacing: -0.2px;
@@ -52,7 +52,7 @@ export const containerStyle = css`
 
 export const aiTitleStyle = css`
     color: #000;
-    font-family: 'Pretendard Variable';
+    font-family: 'Pretendard-SemiBold';
     font-size: 24px;
     font-weight: 600;
     letter-spacing: -1.2px;
@@ -96,7 +96,7 @@ export const gptIconStyle = css`
 
 export const gptTextStyle = css`
     margin-top: 5px;
-    font-family: 'Pretendard Variable';
+    font-family: 'Pretendard-Medium';
     font-size: 14px;
     font-weight: 600;
     color: #000;
@@ -122,7 +122,7 @@ export const nextButtonStyle = css`
 
 export const nextButtonTextStyle = css`
     color: #FFF;
-    font-family: "Pretendard Variable";
+    font-family: 'Pretendard-Light';
     font-size: 14px;
     font-weight: 600;
     margin-right: 5px;

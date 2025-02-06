@@ -20,8 +20,8 @@ const BotAdd = () => {
                 <p css={S.botCountStyle}>0/0 Bot</p>
                 <div css={S.addButtonStyle} onClick={() => navigate('/bot/ai')}>
                 <span css={S.addButtonTextStyle}>+ 새로운 봇 생성하기</span>
-                </div>
             </div>
+        </div>
             
 
             <div css={S.dottedBoxStyle}>

@@ -24,6 +24,7 @@ const logoStyle = css`
     width: 170px;
     height: auto;
     margin-bottom: 40px;
+    cursor: pointer;
 `;
 
 const navItemStyle = (isActive) => css`
@@ -37,12 +38,12 @@ const navItemStyle = (isActive) => css`
     padding: 10px;
     border-radius: 10px;
     margin-bottom: 5px;
-    background: ${isActive ? 'rgba(241, 80, 47, 0.10)' : 'transparent'};
+    background: ${isActive ? '#F5F5F5' : 'transparent'};
     cursor: pointer;
     transition: background 0.2s ease-in-out;
 
 &:hover {
-    background: rgba(241, 80, 47, 0.15);
+    background: #E6E6E6;
 }
 `;
 
@@ -78,7 +79,7 @@ const Sidebar = () => {
     return (
         <div css={sidebarStyle}>
         {/* 로고 */}
-        <img src={branchifyLogo} alt="Branchify" css={logoStyle} />
+        <img src={branchifyLogo} alt="Branchify" css={logoStyle} onClick={() => handleNavigation('/', 'main')} />
 
         {/* 메뉴*/}
         <div

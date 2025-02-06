@@ -28,7 +28,7 @@ export const mainTitle = css`
 
 export const subDescription = css`
     color: #252525;
-    font-family: 'Pretendard Variable';
+    font-family: 'Pretendard-SemiBold';
     font-size: 16px;
     font-weight: 600;
     letter-spacing: -0.2px;
@@ -54,7 +54,7 @@ export const sectionTitle = css`
     display: flex;
     gap: 5px;
     color: #000;
-    font-family: 'Pretendard Variable';
+    font-family: 'Pretendard-SemiBold';
     font-size: 24px;
     font-weight: 600;
     letter-spacing: -1.2px;
@@ -66,7 +66,7 @@ export const sectionTitle = css`
 
 export const asterisk = css`
     color: #F1502F;
-    font-family: 'Pretendard Variable';
+    font-family: 'Pretendard-Medium';
     font-size: 22px;
     font-weight: 600;
     letter-spacing: -1.1px;
@@ -79,7 +79,7 @@ export const inputBox = css`
     border: 1px dashed #5F6368;
     background: #FFF;
     padding: 10px;
-    font-family: 'Pretendard Variable';
+    font-family: 'Pretendard-Medium';
     font-size: 15px;
     font-weight: 500;
     letter-spacing: -0.75px;
@@ -93,7 +93,7 @@ export const inputBoxPromport = css`
     border: 1px dashed #5F6368;
     background: #FFF;
     padding: 10px;
-    font-family: 'Pretendard Variable';
+    font-family: 'Pretendard-Light';
     font-size: 15px;
     font-weight: 500;
     letter-spacing: -0.75px;
@@ -104,7 +104,7 @@ export const inputBoxPromport = css`
     
     &::placeholder {
         color:rgb(114, 118, 122);
-        font-family: 'Pretendard Variable';
+        font-family: 'Pretendard-Light';
         font-size: 15px;
         font-weight: 500;
         letter-spacing: -0.75px;

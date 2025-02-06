@@ -112,7 +112,7 @@ export const dottedBoxStyle = css`
 export const emptyBotTextStyle = css`
     color: #252525;
     text-align: center;
-    font-family: "Pretendard Variable";
+    font-family: 'Pretendard-Light';
     font-size: 20px;
     font-style: normal;
     font-weight: 600;

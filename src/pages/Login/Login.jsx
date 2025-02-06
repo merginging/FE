@@ -39,7 +39,6 @@ const Login = () => {
         const { name, value } = e.target;
         setFormValues({ ...formValues, [name]: value });
 
-        // 실시간 유효성 검사
         if (name === 'email') {
             setErrors({
                 ...errors,
@@ -73,20 +72,28 @@ const Login = () => {
                 const response = await axios.post('https://www.branchify.site/api/user/login', {
                     email: formValues.email,
                     password: formValues.password,
+                }, {
+                    withCredentials: true, // 쿠키 저장
                 });
-    
-                // 로그인 성공: JWT 저장
-                const { token } = response.data;
-                localStorage.setItem('token', token);
-                console.log('JWT 저장 완료:', token); // JWT 저장 확인
-                navigate('/'); 
-                window.location.reload();
+
+                console.log('로그인 응답:', response.data);
+
+                localStorage.setItem('access_token', response.data.accessToken);
+                console.log('현재 쿠키:', document.cookie);
+                
+                const accessToken = response.data.accessToken; 
+                if (accessToken) {
+                    localStorage.setItem('access_token', accessToken); 
+                    console.log('로그인 성공! access_token 저장:', accessToken);
+                    navigate('/');
+                    window.location.reload();
+                } else {
+                    throw new Error('로그인 응답에 access_token이 없습니다.');
+                }
+
             } catch (error) {
-                console.error('로그인 실패 에러:', error.response?.data || error.message); // API 오류 로그
-                setApiError(
-                    error.response?.data?.message ||
-                    '로그인에 실패했습니다. 다시 시도해주세요.'
-                );
+                console.error('로그인 실패:', error.response?.data || error.message);
+                setApiError(error.response?.data?.message || '로그인에 실패했습니다. 다시 시도해주세요.');
             }
         }
     };
