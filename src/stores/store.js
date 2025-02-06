@@ -13,6 +13,7 @@ const scrollSlice = createSlice({
     setTargetScrollPage(state, action) {
       state.targetScrollPage = action.payload;
     },
+    
   },
 });
 

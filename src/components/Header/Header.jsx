@@ -4,10 +4,10 @@ import logoImage from '../../assets/images/logo-small.png';
 import HeaderButton from './HeaderButton';
 import MenuBar from './MenuBar';
 import { useDispatch, useSelector } from 'react-redux';
-import { setShouldScrollToJoinForm } from '../../stores/store';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { setIsLoggedIn } from '../../stores/authSlice'; // 로그인 상태 관리 액션 가져오기
+import { useEffect,  useState } from 'react';
+import { setIsLoggedIn } from '../../stores/authSlice';
+import axios from 'axios';
 
 const headerStyle = css`
   display: flex;
@@ -33,37 +33,82 @@ const headerStyle = css`
 const Header = ({ onButtonClick = () => {} }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // Redux를 통해 로그인 상태를 가져옴
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token'); // localStorage에서 토큰 확인
-    dispatch(setIsLoggedIn(!!token)); // 토큰 유무에 따라 Redux 상태 업데이트
+    const checkLoginStatus = async () => {
+      try {
+        // 로컬스토리지에서 access_token 확인
+        let accessToken = localStorage.getItem('access_token');
+
+        if (!accessToken) {
+          // access_token이 없으면 refreshToken을 이용해서 갱신 시도
+          const refreshResponse = await axios.post(
+            'https://www.branchify.site/api/user/refresh-token',
+            {},
+            { withCredentials: true }
+          );
+
+          if (refreshResponse.data.accessToken) {
+            accessToken = refreshResponse.data.accessToken;
+            localStorage.setItem('access_token', accessToken);
+          }
+        }
+
+        dispatch(setIsLoggedIn(!!accessToken));
+      } catch (error) {
+        console.error('로그인 상태 확인 실패:', error.response?.data || error.message);
+        dispatch(setIsLoggedIn(false));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkLoginStatus();
+
+    window.addEventListener('storage', checkLoginStatus);
+
+    return () => {
+      window.removeEventListener('storage', checkLoginStatus);
+    };
   }, [dispatch]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token'); // 토큰 삭제
-    dispatch(setIsLoggedIn(false)); // Redux 상태 업데이트
-    navigate('/'); // 메인 페이지로 이동
+  const handleLogout = async () => {
+    try {
+      const cookies = document.cookie.split('; ').find(row => row.startsWith('refreshToken='));
+      await axios.post(
+        'https://www.branchify.site/api/user/logout',
+        {},
+        { withCredentials: true }
+      );
+
+      localStorage.removeItem('access_token');
+      dispatch(setIsLoggedIn(false));
+
+      navigate('/');
+      window.location.reload();
+    } catch (error) {
+      console.error('로그아웃 실패:', error.response?.data || error.message);
+    }
   };
 
   const handleBotManagement = () => {
-    navigate('/bot/add'); // 봇 관리 페이지로 이동 (임시)
+    navigate('/bot/add');
   };
+
+  if (loading) return null; // 로딩 중이면 아무것도 표시하지 않음
+
 
   return (
     <div css={headerStyle}>
-      {/* 로고 */}
       <div
         css={css`cursor: pointer;`}
         onClick={() => navigate('/')}
       >
         <img src={logoImage} alt="Logo" width="180px" />
       </div>
-      {/* 메뉴바 */}
       <MenuBar />
-      {/* 로그인/로그아웃 버튼 */}
       {isLoggedIn ? (
         <div
           css={css`cursor: pointer; font-weight: bold; margin-right: 30px; color: #6A6A6A;`}
@@ -79,7 +124,6 @@ const Header = ({ onButtonClick = () => {} }) => {
           로그인
         </div>
       )}
-      {/* 도입/봇 관리 버튼 */}
       <HeaderButton
         text={isLoggedIn ? '봇 관리 하기 ->' : '지금 도입하러 가기 ->'}
         onClick={isLoggedIn ? handleBotManagement : onButtonClick}
