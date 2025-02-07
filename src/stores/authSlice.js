@@ -6,20 +6,13 @@ const initialState = {
 
 const authSlice = createSlice({
     name: 'auth',
-    initialState: {
-        isLoggedIn: !!localStorage.getItem('access_token'),
-    },
+    initialState,
     reducers: {
         setIsLoggedIn(state, action) {
             state.isLoggedIn = action.payload;
-            if (action.payload) {
-                localStorage.setItem('access_token', action.payload);
-            } else {
-                localStorage.removeItem('access_token');
-            }
         },
     },
 });
 
 export const { setIsLoggedIn } = authSlice.actions;
-export default authSlice.reducer; 
+export default authSlice.reducer;

@@ -16,10 +16,13 @@ import {
 import googleLogo from '../../assets/icons/googleLogo.png';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setIsLoggedIn } from '../../stores/authSlice';
 import axios from 'axios';
 
 const Login = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [formValues, setFormValues] = useState({
         email: '',
@@ -31,7 +34,7 @@ const Login = () => {
         password: '',
     });
 
-    const [apiError, setApiError] = useState(''); // API 호출 실패 시 에러 메시지
+    const [apiError, setApiError] = useState('');
 
     const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -54,7 +57,6 @@ const Login = () => {
     };
 
     const handleLoginClick = async () => {
-        // 최종 유효성 검사
         const emailError = validateEmail(formValues.email)
             ? ''
             : '유효한 이메일 주소를 입력해주세요.';
@@ -69,21 +71,18 @@ const Login = () => {
         // 모든 유효성 검사 통과 시
         if (!emailError && !passwordError) {
             try {
-                const response = await axios.post('https://www.branchify.site/api/user/login', {
-                    email: formValues.email,
-                    password: formValues.password,
-                }, {
-                    withCredentials: true, // 쿠키 저장
-                });
+                const response = await axios.post(
+                    'https://www.branchify.site/api/user/login',
+                    { email: formValues.email, password: formValues.password },
+                    { withCredentials: true }
+                );
 
                 console.log('로그인 응답:', response.data);
 
-                localStorage.setItem('access_token', response.data.accessToken);
-                console.log('현재 쿠키:', document.cookie);
-                
-                const accessToken = response.data.accessToken; 
+                const { accessToken } = response.data;
                 if (accessToken) {
-                    localStorage.setItem('access_token', accessToken); 
+                    localStorage.setItem('access_token', accessToken);
+                    dispatch(setIsLoggedIn(true));
                     console.log('로그인 성공! access_token 저장:', accessToken);
                     navigate('/');
                     window.location.reload();
