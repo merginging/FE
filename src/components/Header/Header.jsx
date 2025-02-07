@@ -39,7 +39,6 @@ const Header = ({ onButtonClick = () => {} }) => {
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        // 로컬스토리지에서 access_token 확인
         let accessToken = localStorage.getItem('access_token');
 
         if (!accessToken) {
@@ -76,27 +75,32 @@ const Header = ({ onButtonClick = () => {} }) => {
 
   const handleLogout = async () => {
     try {
-      await axios.post(
-        'https://www.branchify.site/api/user/logout',
-        {}, 
-        { withCredentials: true }
-      );
-  
-      localStorage.removeItem('access_token');
-      dispatch(setIsLoggedIn(false));
-  
-      navigate('/');
-      window.location.reload();
+        // 로그아웃 요청
+        await axios.post(
+            'https://www.branchify.site/api/user/logout',
+            {}, 
+            { withCredentials: true }  // 쿠키 전송
+        );
+
+        // 로컬 스토리지에서 액세스 토큰 삭제
+        localStorage.removeItem('access_token');
+
+        // Redux 상태 업데이트
+        dispatch(setIsLoggedIn(false));
+
+        // 페이지 이동 후 새로고침
+        navigate('/');
+        window.location.reload();
     } catch (error) {
-      console.error('로그아웃 실패:', error.response?.data || error.message);
+        console.error('로그아웃 실패:', error.response?.data || error.message);
     }
-  };
+};
 
   const handleBotManagement = () => {
     navigate('/bot/add');
   };
 
-  if (loading) return null; // 로딩 중이면 아무것도 표시하지 않음
+  if (loading) return null;
 
 
   return (
