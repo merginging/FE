@@ -6,8 +6,8 @@ import { css } from '@emotion/react';
 
 const modalStyle = css`
     position: fixed;
-    top: 49%;
-    right: 17%;
+    top: 55%;
+    right: 10%;
     transform: translateY(-50%);
     width: 500px;
     height: auto;
