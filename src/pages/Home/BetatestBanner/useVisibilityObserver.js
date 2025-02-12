@@ -4,12 +4,9 @@ function useVisibilityObserver(ref, options = { threshold: 0.5 }) {
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                setIsVisible(entry.isIntersecting);
-            },
-            options
-        );
+        const observer = new IntersectionObserver(([entry]) => {
+            setIsVisible(entry.isIntersecting);
+        }, options);
 
         if (ref.current) {
             observer.observe(ref.current);

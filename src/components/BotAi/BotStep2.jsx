@@ -1,6 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { useNavigate } from 'react-router-dom';
 import { useState, useRef } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { createAssistant } from '../../api/assistantAPI';
+
 import arrowIcon from '../../assets/icons/right.svg';
 import {
     pageContainer,
@@ -18,11 +20,10 @@ import {
     prevTextStyle,
     nextButtonStyle,
     buttonTextStyle,
-    arrowIconStyle
+    arrowIconStyle,
 } from './BotStep2.styles';
 
-const BotStep2 = ({ onNext, onPrev }) => {
-    const navigate = useNavigate();
+const BotStep2 = ({ onNext, onPrev, assistantData }) => {
     const [botName, setBotName] = useState('');
     const [botPrompt, setBotPrompt] = useState('');
     const textareaRef = useRef(null);
@@ -35,12 +36,40 @@ const BotStep2 = ({ onNext, onPrev }) => {
 
     const isFormValid = botName.trim() !== '' && botPrompt.trim() !== '';
 
+    const mutation = useMutation({
+        mutationFn: createAssistant,
+        onSuccess: (data) => {
+            console.log('Assistant created:', data);
+            onNext({
+                ...assistantData,
+                assistantName: botName,
+                prompt: botPrompt,
+            });
+        },
+        onError: (error) => {
+            console.error('Error creating assistant:', error);
+            alert('봇 생성에 실패했습니다.');
+        },
+    });
+
+    const handleNextStep = () => {
+        if (!isFormValid) return;
+
+        mutation.mutate({
+            modelName: assistantData.modelName,
+            openaiApiKey: assistantData.openaiApiKey,
+            assistantName: botName,
+            prompt: botPrompt,
+        });
+    };
+
     return (
         <div css={pageContainer}>
             <div css={textContainer}>
                 <h1 css={mainTitle}>봇 추가하기</h1>
                 <p css={subDescription}>
-                    클릭 몇 번이면 당신에게 필요한 봇이 완성돼요<br />
+                    클릭 몇 번이면 당신에게 필요한 봇이 완성돼요
+                    <br />
                     아래의 단계에 따라 당신만의 봇을 만들어보세요!
                 </p>
             </div>
@@ -73,13 +102,17 @@ const BotStep2 = ({ onNext, onPrev }) => {
                 </div>
 
                 <div css={buttonContainerStyle}>
-                    <span css={prevTextStyle} onClick={onPrev}>이전 페이지로</span>
+                    <span css={prevTextStyle} onClick={onPrev}>
+                        이전 페이지로
+                    </span>
                     <button
                         css={nextButtonStyle(isFormValid)}
-                        onClick={onNext}
-                        disabled={!isFormValid}
+                        onClick={handleNextStep}
+                        disabled={!isFormValid || mutation.isLoading}
                     >
-                        <span css={buttonTextStyle}>다음 단계로</span>
+                        <span css={buttonTextStyle}>
+                            {mutation.isLoading ? '저장 중...' : '다음 단계로'}
+                        </span>
                         <img src={arrowIcon} alt="Next" css={arrowIconStyle} />
                     </button>
                 </div>

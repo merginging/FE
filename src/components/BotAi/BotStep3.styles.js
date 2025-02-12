@@ -168,3 +168,46 @@ export const prevTextStyle = css`
     }
 `;
 
+export const nextButtonStyle = (isActive) => css`
+    width: 120px;
+    height: 36px;
+    border-radius: 30px;
+    background: ${isActive ? '#F1502F' : '#ccc'};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: ${isActive ? 'pointer' : 'not-allowed'};
+    font-family: 'Pretendard-SemiBold', sans-serif;
+
+    &:hover {
+        background: ${isActive ? '#d9442a' : '#ccc'};
+    }
+
+    @media (max-width: 768px) {
+        width: 100px;
+        height: 32px;
+    }
+`;
+
+export const buttonTextStyle = css`
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Pretendard-SemiBold', sans-serif;
+
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
+`;
+
+export const arrowIconStyle = css`
+    width: 14px;
+    height: 14px;
+    margin-left: 5px;
+
+    @media (max-width: 768px) {
+        width: 12px;
+        height: 12px;
+    }
+`;
