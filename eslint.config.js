@@ -1,37 +1,30 @@
-import react from 'eslint-plugin-react';
+import eslintPluginReact from 'eslint-plugin-react';
+import babelParser from '@babel/eslint-parser';
 
 export default [
-  {
-    ignores: ['dist'],
-    languageOptions: {
-      parserOptions: {
-        ecmaVersion: 'latest',
-        ecmaFeatures: { jsx: true },
-        sourceType: 'module',
-        requireConfigFile: false,
-      },
+    {
+        ignores: ['dist'],
+        languageOptions: {
+            parser: babelParser,
+            parserOptions: {
+                ecmaVersion: 'latest',
+                ecmaFeatures: { jsx: true },
+                sourceType: 'module',
+                requireConfigFile: false,
+            },
+        },
+        plugins: {
+            react: eslintPluginReact,
+        },
+        settings: {
+            react: { version: 'detect' },
+        },
+        rules: {
+            indent: ['error', 4],
+            'react/jsx-indent': ['error', 4],
+            'react/jsx-indent-props': ['error', 4],
+            quotes: ['error', 'single'],
+            'no-console': 'off',
+        },
     },
-    rules: {
-      quotes: ['error', 'single'],
-      'no-console': 'off',
-    },
-  },
-  // .js 파일 전용 설정
-  {
-    files: ['**/*.js'],
-    rules: {
-      'no-console': 'warn',
-    },
-  },
-  // .jsx 파일 전용 설정
-  {
-    files: ['**/*.jsx'],
-    plugins: { react },
-    settings: {
-      react: { version: 'detect' },
-    },
-    rules: {
-      'react/prop-types': 'off',
-    },
-  },
 ];
