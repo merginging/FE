@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react';
-
 import gptIcon from '../../assets/icons/gpt-black.png';
 import arrowIcon from '../../assets/icons/right.svg';
 import {
@@ -17,13 +16,12 @@ import {
     inputLabelStyle,
     inputStyle,
     buttonContainerStyle,
-    prevTextStyle,
     nextButtonStyle,
     buttonTextStyle,
-    arrowIconStyle
+    arrowIconStyle,
 } from './BotStep1.styles';
 
-const BotStep1 = ({ onNext, onPrev }) => {
+const BotStep1 = ({ onNext }) => {
     const [selectedGPT, setSelectedGPT] = useState(null);
     const [apiKey, setApiKey] = useState('');
 
@@ -35,12 +33,29 @@ const BotStep1 = ({ onNext, onPrev }) => {
         { id: 5, name: 'GPT-3.5-turbo' },
     ];
 
+    const handleNextStep = () => {
+        if (!selectedGPT) {
+            alert('GPT 모델을 선택해주세요.');
+            return;
+        }
+
+        const selectedModelName = GPTMODELS.find(
+            (model) => model.id === selectedGPT
+        )?.name;
+
+        onNext({
+            modelName: selectedModelName,
+            openaiApiKey: apiKey || '',
+        });
+    };
+
     return (
         <div css={pageStyle}>
             <div css={textContainerStyle}>
                 <h1 css={titleStyle}>봇 추가하기</h1>
                 <p css={descriptionStyle}>
-                    클릭 몇 번이면 당신에게 필요한 봇이 완성돼요<br />
+                    클릭 몇 번이면 당신에게 필요한 봇이 완성돼요
+                    <br />
                     아래의 단계에 따라 당신만의 봇을 만들어보세요!
                 </p>
             </div>
@@ -53,15 +68,20 @@ const BotStep1 = ({ onNext, onPrev }) => {
                             css={gptButtonStyle(selectedGPT === model.id)}
                             onClick={() => setSelectedGPT(model.id)}
                         >
-                            <img src={gptIcon} alt={model.name} css={gptIconStyle} />
+                            <img
+                                src={gptIcon}
+                                alt={model.name}
+                                css={gptIconStyle}
+                            />
                             <span css={gptTextStyle}>{model.name}</span>
                         </div>
                     ))}
                 </div>
 
-                {/* API Key 입력 필드 */}
                 <div css={inputContainerStyle}>
-                    <p css={inputLabelStyle}>OpenAI API Key가 있으신가요?</p>
+                    <p css={inputLabelStyle}>
+                        OpenAI API Key가 있으신가요? (선택사항)
+                    </p>
                     <input
                         type="text"
                         placeholder="API Key 입력"
@@ -71,10 +91,12 @@ const BotStep1 = ({ onNext, onPrev }) => {
                     />
                 </div>
 
-                {/* 버튼 컨테이너 */}
                 <div css={buttonContainerStyle}>
-                    <span css={prevTextStyle} onClick={onPrev}>이전 페이지로</span>
-                    <button css={nextButtonStyle} onClick={onNext} disabled={!selectedGPT}>
+                    <button
+                        css={nextButtonStyle}
+                        onClick={handleNextStep}
+                        disabled={!selectedGPT}
+                    >
                         <span css={buttonTextStyle}>다음 단계로</span>
                         <img src={arrowIcon} alt="Next" css={arrowIconStyle} />
                     </button>
