@@ -54,7 +54,7 @@ export const addButtonStyle = css`
     height: 45px;
     flex-shrink: 0;
     border-radius: 5px;
-    background: #F1502F;
+    background: #f1502f;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,7 +67,7 @@ export const addButtonStyle = css`
 `;
 
 export const addButtonTextStyle = css`
-    color: #FFF;
+    color: #fff;
     font-family: 'Pretendard-Bold';
     font-size: 16px;
     font-weight: 700;
@@ -138,12 +138,13 @@ export const botNameStyle = css`
 `;
 
 export const tagStyle = (textColor, bgColor) => css`
-    font-size: 14px;
-    font-weight: 600;
+    font-family: 'Pretendard-SemiBold';
+    font-size: 12px;
+    font-weight: 500;
     color: ${textColor};
     background: ${bgColor};
     border-radius: 20px;
-    padding: 5px 12px;
+    padding: 5px 8px;
 `;
 
 export const statusCircle = (color) => css`
@@ -174,4 +175,17 @@ export const settingButton = css`
     &:hover {
         background: #f3f3f3;
     }
+`;
+
+export const verticalTagContainer = css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+`;
+
+export const centeredBotRow = css`
+    display: flex;
+    align-items: center;
+    text-align: center;
 `;
