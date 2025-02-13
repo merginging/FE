@@ -134,7 +134,7 @@ const notionData = [
                 ],
             },
             { id: 5, title: '목표', children: [] },
-            { id: 6, title: '독서 리스트', children: [] },
+            { id: 6, title: '독서리스트', children: [] },
             { id: 7, title: '나의 공간', children: [] },
         ],
     },
@@ -147,7 +147,9 @@ const BotStepNotion = ({ onClose }) => {
 
     const toggleOpen = (id) => {
         setOpenNodes((prev) =>
-            prev.includes(id) ? prev.filter((nodeId) => nodeId !== id) : [...prev, id]
+            prev.includes(id)
+                ? prev.filter((nodeId) => nodeId !== id)
+                : [...prev, id]
         );
     };
 
@@ -166,7 +168,9 @@ const BotStepNotion = ({ onClose }) => {
         const childIds = getAllChildIds(children);
         setSelectedPages((prev) => {
             if (prev.includes(id)) {
-                return prev.filter((pageId) => ![id, ...childIds].includes(pageId));
+                return prev.filter(
+                    (pageId) => ![id, ...childIds].includes(pageId)
+                );
             } else {
                 return [...prev, id, ...childIds];
             }
@@ -191,19 +195,29 @@ const BotStepNotion = ({ onClose }) => {
                             onClick={() => toggleSelect(node.id, node.children)}
                         >
                             <img
-                                src={selectedPages.includes(node.id) ? checkWhite : checkBlack}
+                                src={
+                                    selectedPages.includes(node.id)
+                                        ? checkWhite
+                                        : checkBlack
+                                }
                                 alt="Check"
                             />
                         </div>
                         <span
                             style={{
-                                fontWeight: selectedPages.includes(node.id) ? 'bold' : 'normal',
+                                fontWeight: selectedPages.includes(node.id)
+                                    ? 'bold'
+                                    : 'normal',
                             }}
                         >
                             {node.title}
                         </span>
                     </div>
-                    {openNodes.includes(node.id) && <div style={{ marginLeft: 20 }}>{renderTree(node.children, depth + 1)}</div>}
+                    {openNodes.includes(node.id) && (
+                        <div style={{ marginLeft: 20 }}>
+                            {renderTree(node.children, depth + 1)}
+                        </div>
+                    )}
                 </li>
             ))}
         </ul>
@@ -211,13 +225,20 @@ const BotStepNotion = ({ onClose }) => {
 
     return (
         <div css={modalStyle}>
-            <span css={closeButton} onClick={onClose}>❌</span>
+            <span css={closeButton} onClick={onClose}>
+                ❌
+            </span>
             <div>
-                <h3 css={titleText}>추가하고 싶은 <b>Notion</b> 페이지를 넣어주세요.</h3>
+                <h3 css={titleText}>
+                    추가하고 싶은 <b>Notion</b> 페이지를 넣어주세요.
+                </h3>
                 {renderTree(notionData)}
             </div>
             <div css={buttonContainer}>
-                <button css={buttonStyle(selectedPages.length > 0)} onClick={() => navigate('/bot/list')}>
+                <button
+                    css={buttonStyle(selectedPages.length > 0)}
+                    onClick={() => navigate('/bot/list')}
+                >
                     <img src={arrowIcon} alt="Next" css={arrowIconStyle} />
                     생성하기
                 </button>
