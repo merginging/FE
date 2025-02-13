@@ -64,7 +64,7 @@ const navItemStyle = (isActive) => css`
     transition: background 0.2s ease-in-out, width 0.3s ease-in-out;
 
     &:hover {
-        background: #E6E6E6;
+        background: #e6e6e6;
     }
 
     @media (max-width: 1024px) {
@@ -147,25 +147,42 @@ const Sidebar = () => {
     return (
         <div css={sidebarStyle}>
             {/* 로고 */}
-            <img src={branchifyLogo} alt="Branchify" css={logoStyle} onClick={() => handleNavigation('/', 'main')} />
+            <img
+                src={branchifyLogo}
+                alt="Branchify"
+                css={logoStyle}
+                onClick={() => handleNavigation('/', 'main')}
+            />
 
             {/* 메뉴 */}
-            <div css={navItemStyle(activeTab === 'bot')} onClick={() => handleNavigation('/bot-management', 'bot')}>
+            <div
+                css={navItemStyle(activeTab === 'bot')}
+                onClick={() => handleNavigation('/bot/list', 'bot')}
+            >
                 <img src={botIcon} alt="Bot Management" />
                 <span css={textStyle}>Management Bot</span>
             </div>
 
-            <div css={navItemStyle(activeTab === 'integration')} onClick={() => handleNavigation('/integration', 'integration')}>
+            <div
+                css={navItemStyle(activeTab === 'integration')}
+                onClick={() => handleNavigation('/integration', 'integration')}
+            >
                 <img src={integrationIcon} alt="Integration" />
                 <span css={textStyle}>Integration</span>
             </div>
 
-            <div css={navItemStyle(activeTab === 'guide')} onClick={() => handleNavigation('/guide', 'guide')}>
+            <div
+                css={navItemStyle(activeTab === 'guide')}
+                onClick={() => handleNavigation('/guide', 'guide')}
+            >
                 <img src={guideIcon} alt="Guide" />
                 <span css={textStyle}>Guide</span>
             </div>
 
-            <div css={supportStyle} onClick={() => handleNavigation('/support', 'support')}>
+            <div
+                css={supportStyle}
+                onClick={() => handleNavigation('/support', 'support')}
+            >
                 <img src={supportIcon} alt="Support" />
                 <span css={textStyle}>Support</span>
             </div>
