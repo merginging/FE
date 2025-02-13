@@ -30,6 +30,7 @@ import {
     nextButtonStyle,
     buttonTextStyle,
     arrowIconStyle,
+    buttonContainerStyle,
 } from './BotStep3.styles';
 
 const BotStep3 = ({ onPrev, assistantData }) => {
@@ -163,23 +164,28 @@ const BotStep3 = ({ onPrev, assistantData }) => {
                                 </div>
                             </div>
                         </div>
-                        <span css={prevTextStyle} onClick={onPrev}>
-                            이전 페이지로
-                        </span>
+                        <div css={buttonContainerStyle}>
+                            <span css={prevTextStyle} onClick={onPrev}>
+                                이전 페이지로
+                            </span>
+                            <button
+                                css={nextButtonStyle(isFormValid)}
+                                onClick={handleCreateBot}
+                                disabled={!isFormValid || mutation.isLoading}
+                            >
+                                <span css={buttonTextStyle}>
+                                    {mutation.isLoading
+                                        ? '생성 중...'
+                                        : '봇 생성하기'}
+                                </span>
+                                <img
+                                    src={arrowIcon}
+                                    alt="Next"
+                                    css={arrowIconStyle}
+                                />
+                            </button>
+                        </div>
                     </div>
-                </div>
-
-                <div css={boxSectionStyle}>
-                    <button
-                        css={nextButtonStyle(isFormValid)}
-                        onClick={handleCreateBot}
-                        disabled={!isFormValid || mutation.isLoading}
-                    >
-                        <span css={buttonTextStyle}>
-                            {mutation.isLoading ? '생성 중...' : '봇 생성하기'}
-                        </span>
-                        <img src={arrowIcon} alt="Next" css={arrowIconStyle} />
-                    </button>
                 </div>
             </div>
 

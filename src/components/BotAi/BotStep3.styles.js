@@ -157,7 +157,6 @@ export const prevTextStyle = css`
     color: #666;
     cursor: pointer;
     text-align: center;
-    margin-top: 20px;
 
     &:hover {
         color: #333;
@@ -209,5 +208,18 @@ export const arrowIconStyle = css`
     @media (max-width: 768px) {
         width: 12px;
         height: 12px;
+    }
+`;
+
+export const buttonContainerStyle = css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin-top: 20px;
+
+    @media (max-width: 768px) {
+        gap: 10px;
     }
 `;
