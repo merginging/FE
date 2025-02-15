@@ -6,7 +6,7 @@ export const pageStyle = css`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 51px;
 
     @media (max-width: 768px) {
         margin-top: 30px;
