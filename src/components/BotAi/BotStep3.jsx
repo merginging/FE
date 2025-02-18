@@ -1,12 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { updateAssistant } from '../../api/assistantAPI';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { fetchNotionPages } from '../../api/notionAPI';
+import { updateAssistant } from '../../api/assistantAPI';
 
 import BotStepPDF from './modal/BotStepPDF';
 import BotStepNotion from './modal/BotStepNotion';
 import BotStepDrive from './modal/BotStepDrive';
+
 import notionIcon from '../../assets/icons/notion-icon.png';
 import driveIcon from '../../assets/icons/drive.png';
 import arrowIcon from '../../assets/icons/right.svg';
@@ -33,17 +35,60 @@ import {
     buttonContainerStyle,
 } from './BotStep3.styles';
 
-const BotStep3 = ({ onPrev, assistantData }) => {
+const BotStep3 = ({ onPrev, assistantData, setAssistantData }) => {
     const [selectedKnowledge, setSelectedKnowledge] = useState(null);
     const [selectedActions, setSelectedActions] = useState([]);
+    const [checked, setChecked] = useState(false);
     const navigate = useNavigate();
 
-    // 지식 추가 (단일 선택)
-    const toggleKnowledge = (knowledge) => {
-        setSelectedKnowledge((prev) => (prev === knowledge ? null : knowledge));
+    console.log('assistantData 확인:', assistantData);
+
+    useEffect(() => {
+        if (assistantData.isConnect === 1) {
+            fetchNotionPages(assistantData.assistantName)
+                .then((data) => {
+                    console.log('Notion 페이지 불러오기 성공:', data);
+                    setAssistantData((prev) => ({
+                        ...prev,
+                        notionPages: data, // Notion 페이지 저장
+                    }));
+                    setSelectedKnowledge('Notion'); // 모달 자동 열기
+                })
+                .catch((error) =>
+                    console.error('Notion 페이지 불러오기 실패:', error)
+                );
+        }
+    }, [assistantData.isConnect]);
+
+    // Notion 클릭 핸들러
+    const handleNotionClick = () => {
+        if (!assistantData.assistantName || !assistantData.userEmail) {
+            alert('어시스턴트 정보를 불러올 수 없습니다.');
+            return;
+        }
+
+        if (checked) {
+            setSelectedKnowledge('Notion');
+        } else {
+            setChecked(true);
+            const notionAuthURL = `https://www.branchify.site/api/oauth/notion/connect?userEmail=${encodeURIComponent(
+                assistantData.userEmail
+            )}&assistantName=${encodeURIComponent(
+                assistantData.assistantName
+            )}`;
+
+            const notionWindow = window.open(
+                notionAuthURL,
+                '_blank',
+                'width=600,height=700'
+            );
+            if (!notionWindow) {
+                alert('팝업 차단이 활성화되어 있습니다. 팝업을 허용해주세요.');
+            }
+        }
     };
 
-    // 액션 선택 (다중 선택 가능)
+    // 액션 추가 (다중 선택 가능)
     const toggleAction = (action) => {
         setSelectedActions((prev) =>
             prev.includes(action)
@@ -52,25 +97,22 @@ const BotStep3 = ({ onPrev, assistantData }) => {
         );
     };
 
-    console.log('🔍 assistantData 확인:', assistantData);
-    console.log('🔍 assistantName 확인:', assistantData?.assistantName);
-
     const isFormValid = selectedActions.length > 0;
 
     const mutation = useMutation({
         mutationFn: updateAssistant,
         onSuccess: () => {
-            console.log('Assistant updated successfully');
+            console.log('Assistant 업데이트 성공!');
             alert('봇 생성 완료!');
             navigate('/bot/list');
         },
         onError: (error) => {
-            console.error('Error updating assistant:', error);
+            console.error('Assistant 업데이트 실패:', error);
             alert('업데이트 실패!');
         },
     });
 
-    const handleCreateBot = async () => {
+    const handleCreateBot = () => {
         if (!assistantData.assistantName) {
             alert('Assistant 데이터가 없습니다.');
             return;
@@ -106,7 +148,7 @@ const BotStep3 = ({ onPrev, assistantData }) => {
                             <div css={boxSectionStyle}>
                                 <div
                                     css={boxStyle(selectedKnowledge === 'PDF')}
-                                    onClick={() => toggleKnowledge('PDF')}
+                                    onClick={() => setSelectedKnowledge('PDF')}
                                 >
                                     <span css={knowledgeText}>PDF</span>
                                     <span css={knowledgeText}>업로드</span>
@@ -115,7 +157,7 @@ const BotStep3 = ({ onPrev, assistantData }) => {
                                     css={boxStyle(
                                         selectedKnowledge === 'Notion'
                                     )}
-                                    onClick={() => toggleKnowledge('Notion')}
+                                    onClick={handleNotionClick}
                                 >
                                     <img src={notionIcon} alt="Notion" />
                                     <span css={knowledgeText}>Notion</span>
@@ -124,7 +166,9 @@ const BotStep3 = ({ onPrev, assistantData }) => {
                                     css={boxStyle(
                                         selectedKnowledge === 'Drive'
                                     )}
-                                    onClick={() => toggleKnowledge('Drive')}
+                                    onClick={() =>
+                                        setSelectedKnowledge('Drive')
+                                    }
                                 >
                                     <img src={driveIcon} alt="Drive" />
                                     <span css={knowledgeText}>Drive</span>
@@ -164,6 +208,7 @@ const BotStep3 = ({ onPrev, assistantData }) => {
                                 </div>
                             </div>
                         </div>
+
                         <div css={buttonContainerStyle}>
                             <span css={prevTextStyle} onClick={onPrev}>
                                 이전 페이지로
@@ -189,6 +234,7 @@ const BotStep3 = ({ onPrev, assistantData }) => {
                 </div>
             </div>
 
+            {/* 모달 렌더링 */}
             {selectedKnowledge && (
                 <div>
                     {selectedKnowledge === 'PDF' && (
@@ -198,6 +244,7 @@ const BotStep3 = ({ onPrev, assistantData }) => {
                     )}
                     {selectedKnowledge === 'Notion' && (
                         <BotStepNotion
+                            assistantName={assistantData.assistantName}
                             onClose={() => setSelectedKnowledge(null)}
                         />
                     )}
