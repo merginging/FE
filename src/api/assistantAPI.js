@@ -21,7 +21,6 @@ export const fetchAssistantList = async () => {
             },
         });
 
-        console.log('✅ 응답 데이터:', response.data);
         return response.data;
     } catch (error) {
         console.error(
@@ -74,7 +73,6 @@ export const updateAssistant = async ({ assistantName, actionTags }) => {
             '최종 PATCH URL:',
             `${API_BASE_URL}/assistantlist/${assistantName}`
         );
-        console.log('보낼 데이터:', { actionTags });
 
         const response = await axios.patch(
             `${API_BASE_URL}/assistantlist/${assistantName}`,
