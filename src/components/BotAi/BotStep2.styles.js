@@ -53,18 +53,18 @@ export const subDescription = css`
 `;
 
 export const mainContentBox = css`
-    width: 40%;
+    width: 50%;
     border-radius: 10px;
     border: 1px solid #d6d6d6;
     background: #fff;
-    padding: 15px;
+    padding: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
     font-family: 'Pretendard', sans-serif;
     margin-right: auto;
-    margin-left: 110px;
+    margin-left: 80px;
 
     @media (max-width: 768px) {
         width: 95%;
@@ -79,7 +79,7 @@ export const inputContainer = css`
     flex-direction: column;
     align-items: flex-start;
     position: relative;
-    margin-top: 50px;
+    margin-top: 20px;
 `;
 
 export const sectionTitle = css`
@@ -94,7 +94,7 @@ export const sectionTitle = css`
 `;
 
 export const asterisk = css`
-    color: #F1502F;
+    color: #f1502f;
     font-size: 22px;
     font-weight: 600;
     font-family: 'Pretendard-Bold', sans-serif;
@@ -106,9 +106,9 @@ export const asterisk = css`
 
 export const inputBox = css`
     width: 100%;
-    height: 40px;
+    height: 30px;
     border-radius: 10px;
-    border: 1px dashed #5F6368;
+    border: 1px dashed #5f6368;
     padding: 10px;
     font-size: 15px;
     font-family: 'Pretendard-Regular', sans-serif;
@@ -123,7 +123,7 @@ export const inputBoxPromport = css`
     width: 100%;
     min-height: 60px;
     border-radius: 10px;
-    border: 1px dashed #5F6368;
+    border: 1px dashed #5f6368;
     padding: 10px;
     font-size: 15px;
     resize: none;
@@ -136,13 +136,23 @@ export const inputBoxPromport = css`
     }
 `;
 
+export const inputLabelContainer = css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 5px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+`;
+
 export const templateButton = css`
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 110px;
-    height: 27px;
-    background: rgba(241, 80, 47, 0.50);
+    width: 120px;
+    height: 30px;
+    background: rgba(241, 80, 47, 0.5);
     border-radius: 5px;
     font-size: 14px;
     font-weight: 600;
@@ -151,9 +161,9 @@ export const templateButton = css`
     font-family: 'Pretendard-SemiBold', sans-serif;
 
     @media (max-width: 768px) {
-        width: 100px;
-        height: 26px;
-        font-size: 12px;
+        width: 100%;
+        height: 30px;
+        margin-top: 8px;
     }
 `;
 
@@ -164,6 +174,7 @@ export const buttonContainerStyle = css`
     gap: 15px;
     width: 100%;
     margin-top: 20px;
+    margin-bottom: 20px;
 
     @media (max-width: 768px) {
         flex-direction: column;
@@ -206,7 +217,7 @@ export const nextButtonStyle = (isActive) => css`
 `;
 
 export const buttonTextStyle = css`
-    color: #FFF;
+    color: #fff;
     font-size: 14px;
     font-weight: 600;
     font-family: 'Pretendard-SemiBold', sans-serif;

@@ -21,6 +21,7 @@ import {
     nextButtonStyle,
     buttonTextStyle,
     arrowIconStyle,
+    inputLabelContainer,
 } from './BotStep2.styles';
 
 const BotStep2 = ({ onNext, onPrev, assistantData }) => {
@@ -89,10 +90,12 @@ const BotStep2 = ({ onNext, onPrev, assistantData }) => {
                 </div>
 
                 <div css={inputContainer}>
-                    <label css={sectionTitle}>
-                        챗봇 프롬프트 작성하기<span css={asterisk}>*</span>
-                    </label>
-                    <button css={templateButton}>템플릿 사용하기</button>
+                    <div css={inputLabelContainer}>
+                        <label css={sectionTitle}>
+                            챗봇 프롬프트 작성하기<span css={asterisk}>*</span>
+                        </label>
+                        <button css={templateButton}>템플릿 사용하기</button>
+                    </div>
                     <textarea
                         ref={textareaRef}
                         css={inputBoxPromport}
