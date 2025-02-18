@@ -53,7 +53,7 @@ export const subDescription = css`
 `;
 
 export const mainContentBox = css`
-    width: 50%;
+    width: 86%;
     border-radius: 10px;
     border: 1px solid #d6d6d6;
     background: #fff;
