@@ -1,42 +1,74 @@
 import axios from 'axios';
 
-// ✅ Notion OAuth 연결 API
+const API_BASE_URL = 'https://www.branchify.site/api';
+
+/**
+ * @param {string} userEmail - 사용자 이메일
+ * @param {string} assistantName - 어시스턴트 이름
+ * @returns {Promise<Object>} Notion OAuth 연결 응답 데이터
+ */
 export const connectNotionOAuth = async ({ userEmail, assistantName }) => {
     try {
         const response = await axios.get(
             'https://www.branchify.site/api/oauth/notion/connect',
             {
-                params: { userEmail, assistantName }, // ✅ Query Params로 추가
+                params: { userEmail, assistantName },
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem(
                         'access_token'
                     )}`,
-                }, // ✅ 토큰이 필요한 경우 추가
+                },
+                maxRedirects: 0,
             }
         );
+
         return response.data;
     } catch (error) {
-        console.error('❌ Notion OAuth API 요청 실패:', error);
-        throw error;
+        if (error.response?.status === 302) {
+            console.log('Notion OAuth 리디렉트 감지! 새 창에서 열기');
+            window.location.href = error.response.headers.location;
+        } else {
+            console.error('Notion OAuth API 요청 실패:', error);
+            throw error;
+        }
     }
 };
 
+/**
+ * @param {string} assistantName - 어시스턴트 이름
+ * @returns {Promise<Object[]>} Notion 페이지 데이터 배열
+ */
 export const fetchNotionPages = async (assistantName) => {
     const token = localStorage.getItem('access_token');
 
     if (!token) {
+        console.error('인증 토큰이 없습니다.');
         throw new Error('인증 토큰이 없습니다.');
     }
 
-    const response = await axios.get(
-        'https://www.branchify.site/api/assistantlist/notionPages',
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            params: { assistantName }, // Params 추가
-        }
-    );
+    if (!assistantName) {
+        console.error('assistantName이 필요합니다.');
+        throw new Error('assistantName이 필요합니다.');
+    }
 
-    return response.data;
+    try {
+        const response = await axios.get(
+            `${API_BASE_URL}/assistantlist/notionPages`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                params: { assistantName },
+            }
+        );
+
+        console.log('Notion 페이지 데이터:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error(
+            'Notion 페이지 API 요청 실패:',
+            error.response?.data || error.message
+        );
+        throw error;
+    }
 };

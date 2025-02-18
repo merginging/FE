@@ -39,11 +39,12 @@ const BotStep2 = ({ onNext, onPrev, assistantData }) => {
     const mutation = useMutation({
         mutationFn: createAssistant,
         onSuccess: (data) => {
-            console.log('Assistant created:', data);
+            // userEmail을 포함하여 다음 단계로 전달
             onNext({
                 ...assistantData,
                 assistantName: botName,
                 prompt: botPrompt,
+                userEmail: data.userEmail, // 서버에서 받은 userEmail 저장
             });
         },
         onError: (error) => {

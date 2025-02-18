@@ -10,6 +10,7 @@ const BotAi = () => {
         openaiApiKey: '',
         assistantName: '',
         prompt: '',
+        userEmail: '',
     });
 
     return (
@@ -32,6 +33,7 @@ const BotAi = () => {
                     assistantData={assistantData}
                 />
             )}
+
             {step === 3 && (
                 <BotStep3
                     onPrev={() => setStep(2)}
