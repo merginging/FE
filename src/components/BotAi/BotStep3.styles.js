@@ -20,7 +20,7 @@ export const pageContainer = css`
 export const leftContainer = css`
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 55%;
     align-items: flex-start;
     padding-left: 65px;
 
@@ -196,7 +196,7 @@ export const buttonTextStyle = css`
     font-family: 'Pretendard-SemiBold', sans-serif;
 
     @media (max-width: 768px) {
-        font-size: 12px;
+        font-size: 11px;
     }
 `;
 
