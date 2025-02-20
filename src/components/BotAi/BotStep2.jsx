@@ -2,6 +2,7 @@
 import { useState, useRef } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { createAssistant } from '../../api/assistantAPI';
+import BotTemplateModal from './modal/BotTemplateModal';
 
 import arrowIcon from '../../assets/icons/right.svg';
 import {
@@ -27,12 +28,18 @@ import {
 const BotStep2 = ({ onNext, onPrev, assistantData }) => {
     const [botName, setBotName] = useState('');
     const [botPrompt, setBotPrompt] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const textareaRef = useRef(null);
 
     const handleInput = (e) => {
         setBotPrompt(e.target.value);
         textareaRef.current.style.height = '60px';
         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    };
+
+    const handleTemplateSelect = (templateText) => {
+        setBotPrompt(templateText);
+        setIsModalOpen(false);
     };
 
     const isFormValid = botName.trim() !== '' && botPrompt.trim() !== '';
@@ -67,6 +74,13 @@ const BotStep2 = ({ onNext, onPrev, assistantData }) => {
 
     return (
         <div css={pageContainer}>
+            {isModalOpen && (
+                <BotTemplateModal
+                    onClose={() => setIsModalOpen(false)}
+                    onSelect={handleTemplateSelect}
+                />
+            )}
+
             <div css={textContainer}>
                 <h1 css={mainTitle}>봇 추가하기</h1>
                 <p css={subDescription}>
@@ -94,7 +108,12 @@ const BotStep2 = ({ onNext, onPrev, assistantData }) => {
                         <label css={sectionTitle}>
                             챗봇 프롬프트 작성하기<span css={asterisk}>*</span>
                         </label>
-                        <button css={templateButton}>템플릿 사용하기</button>
+                        <button
+                            css={templateButton}
+                            onClick={() => setIsModalOpen(true)}
+                        >
+                            템플릿 선택하기
+                        </button>
                     </div>
                     <textarea
                         ref={textareaRef}
