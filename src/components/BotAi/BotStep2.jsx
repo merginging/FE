@@ -28,31 +28,33 @@ import {
 const BotStep2 = ({ onNext, onPrev, assistantData }) => {
     const [botName, setBotName] = useState('');
     const [botPrompt, setBotPrompt] = useState('');
+    const [botPromptDetail, setBotPromptDetail] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const textareaRef = useRef(null);
 
-    const handleInput = (e) => {
-        setBotPrompt(e.target.value);
+    const handlePromptDetailChange = (e) => {
+        setBotPromptDetail(e.target.value);
         textareaRef.current.style.height = '60px';
         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     };
 
-    const handleTemplateSelect = (templateText) => {
-        setBotPrompt(templateText);
+    const handleTemplateSelect = ({ prompt, promptDetail }) => {
+        setBotPrompt(prompt);
+        setBotPromptDetail(promptDetail);
         setIsModalOpen(false);
     };
 
-    const isFormValid = botName.trim() !== '' && botPrompt.trim() !== '';
+    const isFormValid = botName.trim() !== '' && botPromptDetail.trim() !== '';
 
     const mutation = useMutation({
         mutationFn: createAssistant,
         onSuccess: (data) => {
-            // userEmail을 포함하여 다음 단계로 전달
             onNext({
                 ...assistantData,
                 assistantName: botName,
                 prompt: botPrompt,
-                userEmail: data.userEmail, // 서버에서 받은 userEmail 저장
+                promptDetail: botPromptDetail,
+                userEmail: data.userEmail,
             });
         },
         onError: (error) => {
@@ -69,6 +71,7 @@ const BotStep2 = ({ onNext, onPrev, assistantData }) => {
             openaiApiKey: assistantData.openaiApiKey,
             assistantName: botName,
             prompt: botPrompt,
+            promptDetail: botPromptDetail,
         });
     };
 
@@ -106,7 +109,8 @@ const BotStep2 = ({ onNext, onPrev, assistantData }) => {
                 <div css={inputContainer}>
                     <div css={inputLabelContainer}>
                         <label css={sectionTitle}>
-                            챗봇 프롬프트 작성하기<span css={asterisk}>*</span>
+                            챗봇 프롬프트 상세 설명 작성하기
+                            <span css={asterisk}>*</span>
                         </label>
                         <button
                             css={templateButton}
@@ -119,8 +123,8 @@ const BotStep2 = ({ onNext, onPrev, assistantData }) => {
                         ref={textareaRef}
                         css={inputBoxPromport}
                         placeholder="챗봇의 설명을 작성해주세요."
-                        value={botPrompt}
-                        onChange={handleInput}
+                        value={botPromptDetail}
+                        onChange={handlePromptDetailChange}
                     />
                 </div>
 
