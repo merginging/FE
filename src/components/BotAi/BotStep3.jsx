@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { fetchNotionPages } from '../../api/notionAPI';
 import { updateAssistant } from '../../api/assistantAPI';
 
@@ -24,7 +24,6 @@ import {
     knowledgeBox,
     sectionText,
     boxSectionStyle,
-    actionBox,
     boxStyle,
     knowledgeText,
     actionText,
@@ -38,39 +37,38 @@ import {
 const BotStep3 = ({ onPrev, assistantData, setAssistantData }) => {
     const [selectedKnowledge, setSelectedKnowledge] = useState(null);
     const [selectedActions, setSelectedActions] = useState([]);
-    const [checked, setChecked] = useState(false);
     const navigate = useNavigate();
 
-    console.log('assistantData 확인:', assistantData);
+    const { data: updatedAssistant, refetch } = useQuery({
+        queryKey: ['assistant', assistantData.assistantName],
+        queryFn: () => fetchNotionPages(assistantData.assistantName),
+        enabled: !!assistantData.assistantName,
+    });
 
     useEffect(() => {
-        if (assistantData.isConnect === 1) {
-            fetchNotionPages(assistantData.assistantName)
-                .then((data) => {
-                    console.log('Notion 페이지 불러오기 성공:', data);
-                    setAssistantData((prev) => ({
-                        ...prev,
-                        notionPages: data, // Notion 페이지 저장
-                    }));
-                    setSelectedKnowledge('Notion'); // 모달 자동 열기
-                })
-                .catch((error) =>
-                    console.error('Notion 페이지 불러오기 실패:', error)
-                );
+        if (updatedAssistant && updatedAssistant.isConnect === 1) {
+            console.log('Notion 연결됨', updatedAssistant);
+            setAssistantData((prev) => ({
+                ...prev,
+                isConnect: 1,
+            }));
+            setSelectedKnowledge('Notion');
         }
-    }, [assistantData.isConnect]);
+    }, [updatedAssistant]);
 
-    // Notion 클릭 핸들러
+    const handlePDFClick = () => {
+        setSelectedKnowledge('PDF');
+    };
+
     const handleNotionClick = () => {
         if (!assistantData.assistantName || !assistantData.userEmail) {
             alert('어시스턴트 정보를 불러올 수 없습니다.');
             return;
         }
 
-        if (checked) {
+        if (assistantData.isConnect === 1) {
             setSelectedKnowledge('Notion');
         } else {
-            setChecked(true);
             const notionAuthURL = `https://www.branchify.site/api/oauth/notion/connect?userEmail=${encodeURIComponent(
                 assistantData.userEmail
             )}&assistantName=${encodeURIComponent(
@@ -83,12 +81,11 @@ const BotStep3 = ({ onPrev, assistantData, setAssistantData }) => {
                 'width=600,height=700'
             );
             if (!notionWindow) {
-                alert('팝업 차단이 활성화되어 있습니다. 팝업을 허용해주세요.');
+                alert('팝업을 허용해주세요.');
             }
         }
     };
 
-    // 액션 추가 (다중 선택 가능)
     const toggleAction = (action) => {
         setSelectedActions((prev) =>
             prev.includes(action)
@@ -97,29 +94,15 @@ const BotStep3 = ({ onPrev, assistantData, setAssistantData }) => {
         );
     };
 
-    const isFormValid = selectedActions.length > 0;
-
     const mutation = useMutation({
         mutationFn: updateAssistant,
         onSuccess: () => {
-            console.log('Assistant 업데이트 성공!');
-            alert('봇 생성 완료!');
             navigate('/bot/list');
-        },
-        onError: (error) => {
-            console.error('Assistant 업데이트 실패:', error);
-            alert('업데이트 실패!');
         },
     });
 
     const handleCreateBot = () => {
         if (!assistantData.assistantName) {
-            alert('Assistant 데이터가 없습니다.');
-            return;
-        }
-
-        if (selectedActions.length === 0) {
-            alert('최소 한 개의 액션을 선택해주세요.');
             return;
         }
 
@@ -144,11 +127,11 @@ const BotStep3 = ({ onPrev, assistantData, setAssistantData }) => {
                 <div css={mainContentBox}>
                     <div css={knowledgeActionContainer}>
                         <div css={knowledgeBox}>
-                            <h3 css={sectionText}>지식 추가하기</h3>
+                            <h3 css={sectionText}>지식 추가하기 (필수)</h3>
                             <div css={boxSectionStyle}>
                                 <div
                                     css={boxStyle(selectedKnowledge === 'PDF')}
-                                    onClick={() => setSelectedKnowledge('PDF')}
+                                    onClick={handlePDFClick}
                                 >
                                     <span css={knowledgeText}>PDF</span>
                                     <span css={knowledgeText}>업로드</span>
@@ -176,36 +159,33 @@ const BotStep3 = ({ onPrev, assistantData, setAssistantData }) => {
                             </div>
                         </div>
 
-                        <div css={actionBox}>
-                            <h3 css={sectionText}>액션 선택하기</h3>
-                            <div css={boxSectionStyle}>
-                                <div
-                                    css={boxStyle(
-                                        selectedActions.includes('이미지 해석')
-                                    )}
-                                    onClick={() => toggleAction('이미지 해석')}
-                                >
-                                    <span css={actionText}>🏞️</span>
-                                    <span css={actionText}>이미지 해석</span>
-                                </div>
-                                <div
-                                    css={boxStyle(
-                                        selectedActions.includes('쓰레드 분석')
-                                    )}
-                                    onClick={() => toggleAction('쓰레드 분석')}
-                                >
-                                    <span css={actionText}>💬</span>
-                                    <span css={actionText}>쓰레드 분석</span>
-                                </div>
-                                <div
-                                    css={boxStyle(
-                                        selectedActions.includes('날짜 반영')
-                                    )}
-                                    onClick={() => toggleAction('날짜 반영')}
-                                >
-                                    <span css={actionText}>📅</span>
-                                    <span css={actionText}>날짜 반영</span>
-                                </div>
+                        <div css={boxSectionStyle}>
+                            <div
+                                css={boxStyle(
+                                    selectedActions.includes('이미지 해석')
+                                )}
+                                onClick={() => toggleAction('이미지 해석')}
+                            >
+                                <span css={actionText}>🏞️</span>
+                                <span css={actionText}>이미지 해석</span>
+                            </div>
+                            <div
+                                css={boxStyle(
+                                    selectedActions.includes('쓰레드 분석')
+                                )}
+                                onClick={() => toggleAction('쓰레드 분석')}
+                            >
+                                <span css={actionText}>💬</span>
+                                <span css={actionText}>쓰레드 분석</span>
+                            </div>
+                            <div
+                                css={boxStyle(
+                                    selectedActions.includes('날짜 반영')
+                                )}
+                                onClick={() => toggleAction('날짜 반영')}
+                            >
+                                <span css={actionText}>📅</span>
+                                <span css={actionText}>날짜 반영</span>
                             </div>
                         </div>
 
@@ -214,9 +194,8 @@ const BotStep3 = ({ onPrev, assistantData, setAssistantData }) => {
                                 이전 페이지로
                             </span>
                             <button
-                                css={nextButtonStyle(isFormValid)}
+                                css={nextButtonStyle(true)}
                                 onClick={handleCreateBot}
-                                disabled={!isFormValid || mutation.isLoading}
                             >
                                 <span css={buttonTextStyle}>
                                     {mutation.isLoading
@@ -234,26 +213,19 @@ const BotStep3 = ({ onPrev, assistantData, setAssistantData }) => {
                 </div>
             </div>
 
-            {/* 모달 렌더링 */}
-            {selectedKnowledge && (
-                <div>
-                    {selectedKnowledge === 'PDF' && (
-                        <BotStepPDF
-                            onClose={() => setSelectedKnowledge(null)}
-                        />
-                    )}
-                    {selectedKnowledge === 'Notion' && (
-                        <BotStepNotion
-                            assistantName={assistantData.assistantName}
-                            onClose={() => setSelectedKnowledge(null)}
-                        />
-                    )}
-                    {selectedKnowledge === 'Drive' && (
-                        <BotStepDrive
-                            onClose={() => setSelectedKnowledge(null)}
-                        />
-                    )}
-                </div>
+            {selectedKnowledge === 'PDF' && (
+                <BotStepPDF
+                    onClose={() => setSelectedKnowledge(null)}
+                    assistantName={assistantData.assistantName}
+                />
+            )}
+
+            {selectedKnowledge === 'Notion' && (
+                <BotStepNotion onClose={() => setSelectedKnowledge(null)} />
+            )}
+
+            {selectedKnowledge === 'Drive' && (
+                <BotStepDrive onClose={() => setSelectedKnowledge(null)} />
             )}
         </div>
     );
