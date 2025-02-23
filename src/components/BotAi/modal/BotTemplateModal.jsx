@@ -15,9 +15,12 @@ import {
 const BotTemplateModal = ({ onClose, onSelect }) => {
     const [selectedBot, setSelectedBot] = useState(null);
 
-    const botDescriptions = {
-        'QnA Bot':
-            'The Contract Review Assistant Bot reviews contracts and legal documents, providing concise and clear responses based on the document content. If a query extends beyond the available information, the bot requests clarification or additional details. It prioritizes accuracy and avoids assumptions not supported by the text. When necessary, the bot asks for more specifics to ensure accurate responses.',
+    const botTemplates = {
+        'QnA Bot': {
+            prompt: 'QnA Bot',
+            promptDetail:
+                'The Contract Review Assistant Bot reviews contracts and legal documents, providing concise and clear responses based on the document content. If a query extends beyond the available information, the bot requests clarification or additional details. It prioritizes accuracy and avoids assumptions not supported by the text. When necessary, the bot asks for more specifics to ensure accurate responses.',
+        },
     };
 
     return (
@@ -44,7 +47,7 @@ const BotTemplateModal = ({ onClose, onSelect }) => {
                     {/* 봇 설명 박스 */}
                     {selectedBot && (
                         <div css={botDescriptionBox}>
-                            <p>{botDescriptions[selectedBot]}</p>
+                            <p>{botTemplates[selectedBot].promptDetail}</p>
                         </div>
                     )}
 
@@ -52,9 +55,7 @@ const BotTemplateModal = ({ onClose, onSelect }) => {
                     <div css={actionButtonsContainer}>
                         <button
                             css={addButton}
-                            onClick={() =>
-                                onSelect(botDescriptions[selectedBot])
-                            }
+                            onClick={() => onSelect(botTemplates[selectedBot])}
                         >
                             추가하기
                         </button>
