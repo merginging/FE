@@ -12,9 +12,6 @@ export const fetchAssistantList = async () => {
     }
 
     try {
-        console.log('API 요청: GET /assistantlist');
-        console.log('Authorization Header:', `Bearer ${accessToken}`);
-
         const response = await axios.get(`${API_BASE_URL}/assistantlist`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -23,10 +20,6 @@ export const fetchAssistantList = async () => {
 
         return response.data;
     } catch (error) {
-        console.error(
-            'Error fetching assistant list:',
-            error.response?.data || error.message
-        );
         throw error;
     }
 };
@@ -37,21 +30,30 @@ export const createAssistant = async ({
     openaiApiKey,
     assistantName,
     prompt,
+    promptDetail,
 }) => {
     const accessToken = localStorage.getItem('access_token');
 
-    const response = await axios.post(
-        `${API_BASE_URL}/assistantlist`,
-        { modelName, openaiApiKey, assistantName, prompt },
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            },
-        }
-    );
+    if (!accessToken) {
+        throw new Error();
+    }
+    try {
+        const response = await axios.post(
+            `${API_BASE_URL}/assistantlist`,
+            { modelName, openaiApiKey, assistantName, prompt, promptDetail },
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
 
-    return response.data;
+        return response.data;
+    } catch (error) {
+        console.error(error.response?.data || error.message);
+        throw error;
+    }
 };
 
 //어시스턴트 업데이트 (Step 3에서 호출)
@@ -61,19 +63,12 @@ export const updateAssistant = async ({ assistantName, actionTags }) => {
         typeof assistantName !== 'string' ||
         assistantName.trim() === ''
     ) {
-        throw new Error(
-            '유효하지 않은 assistantName입니다. 요청을 보낼 수 없습니다.'
-        );
+        throw new Error();
     }
 
     const accessToken = localStorage.getItem('access_token');
 
     try {
-        console.log(
-            '최종 PATCH URL:',
-            `${API_BASE_URL}/assistantlist/${assistantName}`
-        );
-
         const response = await axios.patch(
             `${API_BASE_URL}/assistantlist/${assistantName}`,
             { actionTag: actionTags },
@@ -86,10 +81,6 @@ export const updateAssistant = async ({ assistantName, actionTags }) => {
         );
         return response.data;
     } catch (error) {
-        console.error(
-            'Error updating assistant:',
-            error.response?.data || error.message
-        );
         throw error;
     }
 };

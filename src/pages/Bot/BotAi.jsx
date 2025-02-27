@@ -10,6 +10,7 @@ const BotAi = () => {
         openaiApiKey: '',
         assistantName: '',
         prompt: '',
+        promptdetail: '',
         userEmail: '',
     });
 

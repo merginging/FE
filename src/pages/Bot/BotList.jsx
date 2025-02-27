@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAssistantList } from '../../api/assistantAPI';
-import { css } from '@emotion/react';
 
 import {
     pageStyle,
@@ -30,7 +29,7 @@ import {
 import glassIcon from '../../assets/icons/glass.svg';
 
 const actionTagColors = {
-    '이미지 해석': { text: '#166534', bg: '#DCFCE7' },
+    'QnA Bot': { text: '#166534', bg: '#DCFCE7' },
     '쓰레드 분석': { text: '#92400E', bg: '#FDE68A' },
     '날짜 반영': { text: '#1E3A8A', bg: '#DBEAFE' },
     기본: { text: '#374151', bg: '#E5E7EB' }, // 회색
@@ -40,7 +39,6 @@ const BotList = () => {
     const navigate = useNavigate();
     const [search, setSearch] = useState('');
 
-    // API 데이터 가져오기 (useQuery)
     const {
         data: botData,
         isLoading,
@@ -105,24 +103,19 @@ const BotList = () => {
                             </div>
                             <div css={botColumn(25)}>
                                 <div css={verticalTagContainer}>
-                                    {bot.actionTag &&
-                                    Array.isArray(bot.actionTag) ? (
-                                        bot.actionTag.map((tag, i) => {
-                                            const color =
-                                                actionTagColors[tag] ||
-                                                actionTagColors.기본;
-                                            return (
-                                                <span
-                                                    key={i}
-                                                    css={tagStyle(
-                                                        color.text,
-                                                        color.bg
-                                                    )}
-                                                >
-                                                    {tag}
-                                                </span>
-                                            );
-                                        })
+                                    {bot.prompt ? (
+                                        <span
+                                            css={tagStyle(
+                                                actionTagColors[bot.prompt]
+                                                    ?.text ||
+                                                    actionTagColors.기본.text,
+                                                actionTagColors[bot.prompt]
+                                                    ?.bg ||
+                                                    actionTagColors.기본.bg
+                                            )}
+                                        >
+                                            {bot.prompt}
+                                        </span>
                                     ) : (
                                         <span
                                             css={tagStyle(
@@ -130,11 +123,12 @@ const BotList = () => {
                                                 actionTagColors.기본.bg
                                             )}
                                         >
-                                            기본
+                                            없음
                                         </span>
                                     )}
                                 </div>
                             </div>
+
                             <div css={botColumn(20)}>
                                 <span css={botNameStyle}>{bot.modelName}</span>
                             </div>
@@ -144,7 +138,14 @@ const BotList = () => {
                                 </span>
                             </div>
                             <div css={botColumn(15)}>
-                                <button css={settingButton}>설정</button>
+                                <button
+                                    css={settingButton}
+                                    onClick={() =>
+                                        navigate(`/bot/settings/${bot.id}`)
+                                    }
+                                >
+                                    설정
+                                </button>
                             </div>
                         </div>
                     ))}
