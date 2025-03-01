@@ -4,13 +4,15 @@ import { css } from '@emotion/react';
 export const containerStyle = css`
     padding: 20px;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 40px auto;
 `;
 
 export const headerStyle = css`
-    font-size: 24px;
-    font-weight: bold;
-    font-family: 'Pretendard-Bold', sans-serif;
+    color: #000;
+    font-family: 'Pretendard-Bold';
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 22px;
 `;
 
 export const botInfoContainer = css`
