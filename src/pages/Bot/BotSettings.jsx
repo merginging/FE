@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { fetchAssistantList } from '../../api/assistantAPI';
 import { connectSlackOAuth } from '../../api/slackAPI';
 import { useState, useEffect } from 'react';
@@ -69,35 +69,8 @@ const BotSettings = () => {
         }
     }, [botFromAPI]);
 
-    const slackMutation = useMutation({
-        mutationFn: async () => {
-            if (!userEmail || !assistantName) {
-                throw new Error();
-            }
-            return await connectSlackOAuth({
-                userEmail,
-                assistantName,
-            });
-        },
-        onSuccess: () => {},
-        onError: (error) => {
-            console.error(error);
-        },
-    });
-
-    const handleSlackConnect = async () => {
-        try {
-            const response = await connectSlackOAuth({
-                userEmail,
-                assistantName,
-            });
-
-            slackMutation.mutate();
-
-            if (response.redirectUrl) {
-                window.location.href = response.redirectUrl;
-            }
-        } catch (error) {}
+    const handleSlackConnect = () => {
+        connectSlackOAuth({ userEmail, assistantName });
     };
 
     return (
@@ -186,13 +159,17 @@ const BotSettings = () => {
                                     <button
                                         css={connectionButton}
                                         onClick={handleSlackConnect}
+                                        disabled={
+                                            botFromAPI.slackOAuth !== null
+                                        }
                                     >
                                         <img
                                             src={slackIcon}
                                             css={slackIconStyle}
                                         />
-                                        @ {botFromAPI.assistantName}를 슬랙에
-                                        연결하기
+                                        {botFromAPI.slackOAuth !== null
+                                            ? `@ ${botFromAPI.assistantName}이 슬랙에 연결됨`
+                                            : `@ ${botFromAPI.assistantName}를 슬랙에 연결하기`}
                                     </button>
 
                                     <h3>지라 연결하기</h3>
