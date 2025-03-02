@@ -4,44 +4,43 @@ import { useDispatch } from 'react-redux';
 import { setShouldScrollToJoinForm } from '../../stores/store';
 
 const buttonStyle = css`
-  display: flex;
-  width: 185px;
-  height: 34px;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  cursor: pointer;
-  border-radius: 5px;
-  border: 0;
-  background: #f1502f;
-  color: #fff;
-  font-family: 'Pretendard-Semibold';
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 22px;
+    display: flex;
+    width: 185px;
+    height: 34px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 0;
+    background: #f1502f;
+    color: #fff;
+    font-family: 'Pretendard-Semibold';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 22px;
 
-  &:hover {
-    background-color: #dd4526;
-  }
+    &:hover {
+        background-color: #dd4526;
+    }
 
-  @media (max-width: 768px) {
-    display: none;
-  }
+    @media (max-width: 768px) {
+        display: none;
+    }
 `;
 
 const HeaderButton = ({ text, onClick }) => {
-  return (
-    <button
-      css={buttonStyle}
-      onClick={() => {
-        console.log(`HeaderButton clicked. text: ${text}`);
-        onClick(); // 부모에서 전달받은 onClick 실행
-      }}
-    >
-      {text}
-    </button>
-  );
+    return (
+        <button
+            css={buttonStyle}
+            onClick={() => {
+                onClick();
+            }}
+        >
+            {text}
+        </button>
+    );
 };
 
 export default HeaderButton;
