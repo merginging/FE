@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { fetchAssistantList } from '../../api/assistantAPI';
+import { connectSlackOAuth } from '../../api/slackAPI';
 import { useState, useEffect } from 'react';
 import slackIcon from '../../assets/images/slack.png';
 import {
@@ -27,6 +28,7 @@ import {
 const BotSettings = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+
     const [activeTab, setActiveTab] = useState(1);
     const [selectedBot, setSelectedBot] = useState({
         prompt: '',
@@ -44,6 +46,20 @@ const BotSettings = () => {
 
     const botFromAPI = botData?.find((bot) => bot.id === parseInt(id));
 
+    const [userEmail, setUserEmail] = useState('');
+    const [assistantName, setAssistantName] = useState('');
+
+    useEffect(() => {
+        setUserEmail(
+            botFromAPI?.userEmail || localStorage.getItem('userEmail') || ''
+        );
+        setAssistantName(
+            botFromAPI?.assistantName ||
+                localStorage.getItem('assistantName') ||
+                ''
+        );
+    }, [botFromAPI]);
+
     useEffect(() => {
         if (botFromAPI) {
             setSelectedBot({
@@ -52,6 +68,37 @@ const BotSettings = () => {
             });
         }
     }, [botFromAPI]);
+
+    const slackMutation = useMutation({
+        mutationFn: async () => {
+            if (!userEmail || !assistantName) {
+                throw new Error();
+            }
+            return await connectSlackOAuth({
+                userEmail,
+                assistantName,
+            });
+        },
+        onSuccess: () => {},
+        onError: (error) => {
+            console.error(error);
+        },
+    });
+
+    const handleSlackConnect = async () => {
+        try {
+            const response = await connectSlackOAuth({
+                userEmail,
+                assistantName,
+            });
+
+            slackMutation.mutate();
+
+            if (response.redirectUrl) {
+                window.location.href = response.redirectUrl;
+            }
+        } catch (error) {}
+    };
 
     return (
         <div css={containerStyle}>
@@ -136,7 +183,10 @@ const BotSettings = () => {
 
                                 <div css={slideItem}>
                                     <h3>슬랙 연결하기</h3>
-                                    <button css={connectionButton}>
+                                    <button
+                                        css={connectionButton}
+                                        onClick={handleSlackConnect}
+                                    >
                                         <img
                                             src={slackIcon}
                                             css={slackIconStyle}
