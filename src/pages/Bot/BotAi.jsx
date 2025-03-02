@@ -11,7 +11,7 @@ const BotAi = () => {
         assistantName: '',
         prompt: '',
         promptdetail: '',
-        userEmail: '',
+        userEmail: localStorage.getItem('userEmail') || '',
     });
 
     return (
@@ -19,7 +19,7 @@ const BotAi = () => {
             {step === 1 && (
                 <BotStep1
                     onNext={(data) => {
-                        setAssistantData(data);
+                        setAssistantData((prev) => ({ ...prev, ...data }));
                         setStep(2);
                     }}
                 />
@@ -27,7 +27,7 @@ const BotAi = () => {
             {step === 2 && (
                 <BotStep2
                     onNext={(data) => {
-                        setAssistantData(data);
+                        setAssistantData((prev) => ({ ...prev, ...data }));
                         setStep(3);
                     }}
                     onPrev={() => setStep(1)}

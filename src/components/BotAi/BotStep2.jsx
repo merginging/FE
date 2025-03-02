@@ -49,6 +49,7 @@ const BotStep2 = ({ onNext, onPrev, assistantData }) => {
     const mutation = useMutation({
         mutationFn: createAssistant,
         onSuccess: (data) => {
+            localStorage.setItem('userEmail', data.userEmail);
             onNext({
                 ...assistantData,
                 assistantName: botName,
