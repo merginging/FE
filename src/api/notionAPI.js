@@ -25,7 +25,6 @@ export const connectNotionOAuth = async ({ userEmail, assistantName }) => {
         return response.data;
     } catch (error) {
         if (error.response?.status === 302) {
-            console.log('Notion OAuth 리디렉트 감지! 새 창에서 열기');
             window.location.href = error.response.headers.location;
         } else {
             console.error('Notion OAuth API 요청 실패:', error);
@@ -42,12 +41,10 @@ export const fetchNotionPages = async (assistantName) => {
     const token = localStorage.getItem('access_token');
 
     if (!token) {
-        console.error('인증 토큰이 없습니다.');
         throw new Error('인증 토큰이 없습니다.');
     }
 
     if (!assistantName) {
-        console.error('assistantName이 필요합니다.');
         throw new Error('assistantName이 필요합니다.');
     }
 
@@ -62,13 +59,9 @@ export const fetchNotionPages = async (assistantName) => {
             }
         );
 
-        console.log('Notion 페이지 데이터:', response.data);
         return response.data;
     } catch (error) {
-        console.error(
-            'Notion 페이지 API 요청 실패:',
-            error.response?.data || error.message
-        );
+        console.error(error.response?.data || error.message);
         throw error;
     }
 };
