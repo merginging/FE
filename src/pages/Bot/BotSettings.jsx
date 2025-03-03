@@ -70,8 +70,30 @@ const BotSettings = () => {
     }, [botFromAPI]);
 
     const handleSlackConnect = () => {
+        if (!userEmail || !assistantName) {
+            alert('사용자 이메일 또는 어시스턴트 이름이 없습니다.');
+            return;
+        }
+
         connectSlackOAuth({ userEmail, assistantName });
     };
+
+    const [isSlackConnected, setIsSlackConnected] = useState(false);
+
+    useEffect(() => {
+        const handleSlackAuthComplete = () => {
+            setIsSlackConnected(true);
+        };
+
+        window.addEventListener('slackAuthComplete', handleSlackAuthComplete);
+
+        return () => {
+            window.removeEventListener(
+                'slackAuthComplete',
+                handleSlackAuthComplete
+            );
+        };
+    }, []);
 
     return (
         <div css={containerStyle}>
@@ -159,9 +181,7 @@ const BotSettings = () => {
                                     <button
                                         css={connectionButton}
                                         onClick={handleSlackConnect}
-                                        disabled={
-                                            botFromAPI.slackOAuth !== null
-                                        }
+                                        disabled={isSlackConnected}
                                     >
                                         <img
                                             src={slackIcon}
