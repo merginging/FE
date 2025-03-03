@@ -81,17 +81,16 @@ const BotSettings = () => {
     const [isSlackConnected, setIsSlackConnected] = useState(false);
 
     useEffect(() => {
-        const handleSlackAuthComplete = () => {
-            setIsSlackConnected(true);
+        const handleSlackAuthComplete = (event) => {
+            if (event.data === 'slack_auth_success') {
+                setIsSlackConnected(true);
+            }
         };
 
-        window.addEventListener('slackAuthComplete', handleSlackAuthComplete);
+        window.addEventListener('message', handleSlackAuthComplete);
 
         return () => {
-            window.removeEventListener(
-                'slackAuthComplete',
-                handleSlackAuthComplete
-            );
+            window.removeEventListener('message', handleSlackAuthComplete);
         };
     }, []);
 
