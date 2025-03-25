@@ -160,7 +160,7 @@ const Sidebar = () => {
                 onClick={() => handleNavigation('/bot/list', 'bot')}
             >
                 <img src={botIcon} alt="Bot Management" />
-                <span css={textStyle}>Management Bot</span>
+                <span css={textStyle}>봇 관리하기</span>
             </div>
 
             <div
@@ -168,7 +168,7 @@ const Sidebar = () => {
                 onClick={() => handleNavigation('/integration', 'integration')}
             >
                 <img src={integrationIcon} alt="Integration" />
-                <span css={textStyle}>Integration</span>
+                <span css={textStyle}>인터그레이션</span>
             </div>
 
             <div
@@ -176,7 +176,7 @@ const Sidebar = () => {
                 onClick={() => handleNavigation('/guide', 'guide')}
             >
                 <img src={guideIcon} alt="Guide" />
-                <span css={textStyle}>Guide</span>
+                <span css={textStyle}>가이드</span>
             </div>
 
             <div
@@ -184,7 +184,7 @@ const Sidebar = () => {
                 onClick={() => handleNavigation('/support', 'support')}
             >
                 <img src={supportIcon} alt="Support" />
-                <span css={textStyle}>Support</span>
+                <span css={textStyle}>지원</span>
             </div>
         </div>
     );
