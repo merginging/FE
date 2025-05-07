@@ -58,7 +58,7 @@ const buttonStyle = css`
     height: 38px;
     width: 120px;
     border-radius: 30px;
-    background: #F1502F;
+    background: #f1502f;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -86,10 +86,14 @@ const BotStepDrive = ({ onClose }) => {
 
     return (
         <div css={modalStyle}>
-            <span css={closeButton} onClick={onClose}>❌</span>
+            <span css={closeButton} onClick={onClose}>
+                ❌
+            </span>
             <div>
-                <h3 css={titleText}>추가하고 싶은 <b>Drive</b>를 넣어주세요.</h3>
-            {/* 생성하기 버튼 */}
+                <h3 css={titleText}>
+                    추가하고 싶은 <b>Drive</b>를 넣어주세요.
+                </h3>
+                {/* 생성하기 버튼 */}
             </div>
             <div css={buttonContainer}>
                 <button css={buttonStyle} onClick={() => navigate('/bot/list')}>
