@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { fetchNotionPages } from '../../../api/notionAPI';
+import { useState, useMemo, useEffect } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { fetchNotionPages, saveNotionPages } from '../../../api/notionAPI';
 import arrowIcon from '../../../assets/icons/right.svg';
 import chevronIcon from '../../../assets/icons/chevron.svg';
 import checkBlack from '../../../assets/icons/check-black.svg';
@@ -20,117 +20,173 @@ import {
 } from './BotStepNotion.styles';
 
 const BotStepNotion = ({ onClose, assistantName }) => {
-    const [selectedPages, setSelectedPages] = useState([]);
-    const [openNodes, setOpenNodes] = useState([]);
+    const [selectedIds, setSelectedIds] = useState(new Set());
+    const [openNodes, setOpenNodes] = useState(new Set());
 
     const {
-        data: notionPages,
+        data: rawPages,
         isLoading,
         error,
+        refetch,
     } = useQuery({
         queryKey: ['notionPages', assistantName],
         queryFn: () => fetchNotionPages(assistantName),
         enabled: !!assistantName,
     });
 
+    const attachParents = (nodes, parent = null) =>
+        nodes.map((node) => {
+            const newNode = {
+                id: node.pageId,
+                title: node.title,
+                isChecked: node.isChecked ?? false,
+                parent,
+                children: [],
+            };
+            newNode.children = attachParents(node.children || [], newNode);
+            return newNode;
+        });
+
+    const notionPages = useMemo(
+        () => (rawPages ? attachParents(rawPages) : []),
+        [rawPages]
+    );
+
+    const flattenTree = (nodes) => {
+        let result = [];
+        nodes.forEach((n) => {
+            result.push(n);
+            if (n.children.length) {
+                result = result.concat(flattenTree(n.children));
+            }
+        });
+        return result;
+    };
+    const flatPages = useMemo(() => flattenTree(notionPages), [notionPages]);
+
+    useEffect(() => {
+        if (!rawPages) return;
+        const all = flattenTree(attachParents(rawPages));
+        const init = new Set(all.filter((n) => n.isChecked).map((n) => n.id));
+        setSelectedIds(init);
+    }, [rawPages]);
+
+    const saveMutation = useMutation({
+        mutationFn: () => {
+            const toSave = flatPages
+                .filter((n) => selectedIds.has(n.id))
+                .map((n) => ({ id: n.id, isChecked: true }));
+            return saveNotionPages(assistantName, toSave);
+        },
+        onSuccess: () => {
+            alert('Notion 페이지가 저장되었습니다!');
+            onClose();
+            refetch();
+        },
+        onError: () => {
+            alert('저장에 실패했습니다.');
+        },
+    });
+
     const toggleOpen = (id) => {
-        setOpenNodes((prev) =>
-            prev.includes(id)
-                ? prev.filter((nodeId) => nodeId !== id)
-                : [...prev, id]
-        );
+        setOpenNodes((prev) => {
+            const next = new Set(prev);
+            next.has(id) ? next.delete(id) : next.add(id);
+            return next;
+        });
     };
 
-    const toggleSelect = (page) => {
-        setSelectedPages((prev) =>
-            prev.some((p) => p.pageId === page.pageId)
-                ? prev.filter((p) => p.pageId !== page.pageId)
-                : [...prev, page]
-        );
+    const toggleSelect = (nodeId) => {
+        setSelectedIds((prev) => {
+            const next = new Set(prev);
+            const node = flatPages.find((n) => n.id === nodeId);
+            if (!node) return next;
+            const collectDesc = (n) =>
+                n.children.reduce(
+                    (acc, c) => acc.concat(c.id, collectDesc(c)),
+                    []
+                );
+            const desc = collectDesc(node);
+            if (next.has(nodeId)) {
+                next.delete(nodeId);
+                desc.forEach((id) => next.delete(id));
+            } else {
+                next.add(nodeId);
+                desc.forEach((id) => next.add(id));
+            }
+            return next;
+        });
     };
 
-    // 트리 렌더링 함수
-    const renderTree = (nodes) => (
-        <ul css={treeContainer}>
-            {nodes.map((node) => (
-                <li key={node.pageId}>
-                    <div css={treeItem}>
-                        {node.children && node.children.length > 0 && (
-                            <img
-                                src={chevronIcon}
-                                alt="Toggle"
-                                css={chevronStyle(
-                                    openNodes.includes(node.pageId)
-                                )}
-                                onClick={() => toggleOpen(node.pageId)}
-                            />
-                        )}
-                        <div
-                            css={checkboxStyle(
-                                selectedPages.some(
-                                    (p) => p.pageId === node.pageId
-                                )
+    const renderTree = (nodes, path = 'root', level = 0) => (
+        <ul css={treeContainer(level)}>
+            {nodes.map((node, idx) => {
+                const key = `${path}-${node.id}-${idx}`;
+                const isOpen = openNodes.has(node.id);
+                const isChecked = selectedIds.has(node.id);
+                return (
+                    <li key={key}>
+                        <div css={treeItem}>
+                            {node.children.length > 0 && (
+                                <img
+                                    src={chevronIcon}
+                                    alt={isOpen ? '닫기' : '열기'}
+                                    css={chevronStyle(isOpen)}
+                                    onClick={() => toggleOpen(node.id)}
+                                />
                             )}
-                            onClick={() => toggleSelect(node)}
-                        >
-                            <img
-                                src={
-                                    selectedPages.some(
-                                        (p) => p.pageId === node.pageId
-                                    )
-                                        ? checkWhite
-                                        : checkBlack
-                                }
-                                alt="Check"
-                            />
+                            <div
+                                css={checkboxStyle(isChecked)}
+                                onClick={() => toggleSelect(node.id)}
+                            >
+                                <img
+                                    src={isChecked ? checkWhite : checkBlack}
+                                    alt="체크"
+                                />
+                            </div>
+                            <span
+                                style={{
+                                    fontWeight: isChecked ? 'bold' : 'normal',
+                                }}
+                            >
+                                {node.title}
+                            </span>
                         </div>
-                        <span
-                            style={{
-                                fontWeight: selectedPages.some(
-                                    (p) => p.pageId === node.pageId
-                                )
-                                    ? 'bold'
-                                    : 'normal',
-                            }}
-                        >
-                            {node.title}
-                        </span>
-                    </div>
-                    {openNodes.includes(node.pageId) && (
-                        <div style={{ marginLeft: 20 }}>
-                            {renderTree(node.children)}
-                        </div>
-                    )}
-                </li>
-            ))}
+                        {isOpen &&
+                            node.children.length > 0 &&
+                            renderTree(node.children, key, level + 1)}
+                    </li>
+                );
+            })}
         </ul>
     );
 
-    if (isLoading) return <p>Notion 데이터 불러오는 중...</p>;
-    if (error) return <p>Notion 데이터를 가져오는 중 오류 발생</p>;
+    if (isLoading) return <p>로딩 중…</p>;
+    if (error) return <p>에러 발생</p>;
 
     return (
         <div css={modalStyle}>
             <span css={closeButton} onClick={onClose}>
                 ❌
             </span>
-            <div>
-                <h3 css={titleText}>
-                    추가하고 싶은 <b>Notion</b> 페이지를 넣어주세요.
-                </h3>
-                {notionPages?.length > 0 ? (
-                    renderTree(notionPages)
-                ) : (
-                    <p>Notion 페이지가 없습니다.</p>
-                )}
-            </div>
+            <h3 css={titleText}>
+                추가하고 싶은 <b>Notion</b> 페이지를 넣어주세요.
+            </h3>
+            {notionPages.length > 0 ? (
+                renderTree(notionPages)
+            ) : (
+                <p>Notion 페이지가 없습니다.</p>
+            )}
             <div css={buttonContainer}>
                 <button
-                    css={buttonStyle(selectedPages.length > 0)}
-                    onClick={onClose}
+                    css={buttonStyle(selectedIds.size > 0)}
+                    onClick={() => saveMutation.mutate()}
+                    disabled={saveMutation.isLoading}
                 >
                     <img src={arrowIcon} alt="Next" css={arrowIconStyle} />
-                    저장하기
+                    <span>
+                        {saveMutation.isLoading ? '저장 중…' : '저장하기'}
+                    </span>
                 </button>
             </div>
         </div>
