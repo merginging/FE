@@ -7,7 +7,6 @@ export const modalStyle = css`
     right: 10%;
     transform: translateY(-50%);
     width: 500px;
-    height: auto;
     background: white;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
@@ -45,12 +44,13 @@ export const titleText = css`
     font-family: 'Pretendard', sans-serif;
 `;
 
-export const treeContainer = css`
-    margin-top: 15px;
-    padding-left: 10px;
+export const treeContainer = (level = 0) => css`
+    margin-top: 5px;
+    padding-left: ${10 + level * 16}px;
     display: flex;
     flex-direction: column;
     gap: 5px;
+    list-style: none;
 `;
 
 export const treeItem = css`
@@ -63,6 +63,7 @@ export const treeItem = css`
 `;
 
 export const chevronStyle = (isOpen) => css`
+    margin-left: 5px;
     width: 15px;
     height: 15px;
     transform: rotate(${isOpen ? '90deg' : '0deg'});

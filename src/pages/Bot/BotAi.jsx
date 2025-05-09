@@ -39,6 +39,7 @@ const BotAi = () => {
                 <BotStep3
                     onPrev={() => setStep(2)}
                     assistantData={assistantData}
+                    setAssistantData={setAssistantData}
                 />
             )}
         </div>

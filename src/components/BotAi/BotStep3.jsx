@@ -39,22 +39,18 @@ const BotStep3 = ({ onPrev, assistantData, setAssistantData }) => {
     const [selectedActions, setSelectedActions] = useState([]);
     const navigate = useNavigate();
 
-    const { data: updatedAssistant, refetch } = useQuery({
-        queryKey: ['assistant', assistantData.assistantName],
+    const {
+        data: notionPages,
+        refetch,
+        isLoading,
+        error,
+    } = useQuery({
+        queryKey: ['notionPages', assistantData.assistantName],
         queryFn: () => fetchNotionPages(assistantData.assistantName),
-        enabled: !!assistantData.assistantName,
+        enabled: !!assistantData.assistantName && assistantData.isConnect === 1,
     });
 
-    useEffect(() => {
-        if (updatedAssistant && updatedAssistant.isConnect === 1) {
-            console.log('Notion 연결됨', updatedAssistant);
-            setAssistantData((prev) => ({
-                ...prev,
-                isConnect: 1,
-            }));
-            setSelectedKnowledge('Notion');
-        }
-    }, [updatedAssistant]);
+    useEffect(() => {}, [notionPages]);
 
     const handlePDFClick = () => {
         setSelectedKnowledge('PDF');
@@ -78,13 +74,38 @@ const BotStep3 = ({ onPrev, assistantData, setAssistantData }) => {
             const notionWindow = window.open(
                 notionAuthURL,
                 '_blank',
-                'width=600,height=700'
+                'width=600,height=700,top=100,left=500'
             );
             if (!notionWindow) {
                 alert('팝업을 허용해주세요.');
             }
+
+            // 팝업창이 닫히면 OAuth 연결 상태 갱신
+            const checkPopupClosed = setInterval(() => {
+                if (notionWindow.closed) {
+                    clearInterval(checkPopupClosed);
+                    setAssistantData((prev) => ({ ...prev, isConnect: 1 }));
+                    refetch(); // Notion 페이지 다시 불러오기
+                }
+            }, 1000);
         }
     };
+
+    useEffect(() => {
+        const handleNotionAuthComplete = (event) => {
+            if (event.data === 'notion_auth_success') {
+                if (typeof setAssistantData === 'function') {
+                    setAssistantData((prev) => ({ ...prev, isConnect: 1 }));
+                }
+            }
+        };
+
+        window.addEventListener('message', handleNotionAuthComplete);
+
+        return () => {
+            window.removeEventListener('message', handleNotionAuthComplete);
+        };
+    }, [setAssistantData]);
 
     const toggleAction = (action) => {
         setSelectedActions((prev) =>
@@ -221,7 +242,10 @@ const BotStep3 = ({ onPrev, assistantData, setAssistantData }) => {
             )}
 
             {selectedKnowledge === 'Notion' && (
-                <BotStepNotion onClose={() => setSelectedKnowledge(null)} />
+                <BotStepNotion
+                    onClose={() => setSelectedKnowledge(null)}
+                    assistantName={assistantData.assistantName}
+                />
             )}
 
             {selectedKnowledge === 'Drive' && (

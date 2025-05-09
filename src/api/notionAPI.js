@@ -2,11 +2,6 @@ import axios from 'axios';
 
 const API_BASE_URL = 'https://www.branchify.site/api';
 
-/**
- * @param {string} userEmail - 사용자 이메일
- * @param {string} assistantName - 어시스턴트 이름
- * @returns {Promise<Object>} Notion OAuth 연결 응답 데이터
- */
 export const connectNotionOAuth = async ({ userEmail, assistantName }) => {
     try {
         const response = await axios.get(
@@ -33,10 +28,6 @@ export const connectNotionOAuth = async ({ userEmail, assistantName }) => {
     }
 };
 
-/**
- * @param {string} assistantName - 어시스턴트 이름
- * @returns {Promise<Object[]>} Notion 페이지 데이터 배열
- */
 export const fetchNotionPages = async (assistantName) => {
     const token = localStorage.getItem('access_token');
 
@@ -59,6 +50,32 @@ export const fetchNotionPages = async (assistantName) => {
             }
         );
 
+        return response.data;
+    } catch (error) {
+        console.error(error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const saveNotionPages = async (assistantName, selectedPages) => {
+    const token = localStorage.getItem('access_token');
+    if (!token) throw new Error('인증 토큰이 없습니다.');
+    if (!assistantName) throw new Error('assistantName이 필요합니다.');
+
+    const updatedPages = [...selectedPages].map((page) => ({
+        id: page.id,
+        isChecked: true,
+    }));
+
+    try {
+        const response = await axios.post(
+            `${API_BASE_URL}/assistantlist/notionPages`,
+            updatedPages,
+            {
+                headers: { Authorization: `Bearer ${token}` },
+                params: { assistantName },
+            }
+        );
         return response.data;
     } catch (error) {
         console.error(error.response?.data || error.message);
