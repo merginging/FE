@@ -45,7 +45,7 @@ export const titleText = css`
 `;
 
 export const treeContainer = (level = 0) => css`
-    margin-top: 5px;
+    margin-top: 15px;
     padding-left: ${10 + level * 16}px;
     display: flex;
     flex-direction: column;
@@ -74,7 +74,7 @@ export const chevronStyle = (isOpen) => css`
 export const checkboxStyle = (isChecked) => css`
     width: 15px;
     height: 15px;
-    background: ${isChecked ? 'black' : 'white'};
+    background: ${isChecked ? '#F1502F' : 'white'};
     border-radius: 3px;
     display: flex;
     align-items: center;

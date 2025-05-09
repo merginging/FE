@@ -3,7 +3,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { fetchNotionPages, saveNotionPages } from '../../../api/notionAPI';
 import arrowIcon from '../../../assets/icons/right.svg';
-import chevronIcon from '../../../assets/icons/chevron.svg';
+import chevronIcon from '../../../assets/icons/toggle1.svg';
 import checkBlack from '../../../assets/icons/check-black.svg';
 import checkWhite from '../../../assets/icons/check-white.svg';
 import {
