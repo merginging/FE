@@ -3,7 +3,7 @@
 <img width="1221" height="682" alt="image" src="https://github.com/user-attachments/assets/1e910be4-8c34-4a7a-a1e5-d9ddd325201c" />
 
 
--   배포 URL : https://merging-gtkp2cnbp-hyuke81s-projects.vercel.app/
+-   배포 URL : https://merging-fe.vercel.app/
 -   Test ID : test@gmail.com
 -   Test PW : test1234
 
