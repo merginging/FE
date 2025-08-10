@@ -1,7 +1,7 @@
 # AI와 다양한 협업툴을 연결해 분산된 정보를 통합하여 제공하는 협업 플러그인 README
 
-![alt text](<img width="1221" height="682" alt="image" src="https://github.com/user-attachments/assets/5a9f53b3-abda-420e-9755-668399c74802" />
-)
+<img width="1221" height="682" alt="image" src="https://github.com/user-attachments/assets/1e910be4-8c34-4a7a-a1e5-d9ddd325201c" />
+
 
 -   배포 URL : https://merging-gtkp2cnbp-hyuke81s-projects.vercel.app/
 -   Test ID : test@gmail.com
